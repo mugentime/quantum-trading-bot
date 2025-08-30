@@ -1,0 +1,153 @@
+{
+  "dashboard": {
+    "title": "Quantum Trading Bot - Railway Production Dashboard",
+    "version": "1.0.0",
+    "refresh": "30s",
+    "tags": ["quantum-trading", "railway", "production"],
+    "timezone": "UTC"
+  },
+  "panels": [
+    {
+      "id": 1,
+      "title": "Trading Performance Overview",
+      "type": "stat",
+      "targets": [
+        {
+          "metric": "trading_total_pnl",
+          "legend": "Total P&L"
+        },
+        {
+          "metric": "trading_win_rate",
+          "legend": "Win Rate %"
+        },
+        {
+          "metric": "trading_active_positions",
+          "legend": "Active Positions"
+        }
+      ],
+      "gridPos": {"h": 8, "w": 12, "x": 0, "y": 0}
+    },
+    {
+      "id": 2,
+      "title": "System Health",
+      "type": "graph",
+      "targets": [
+        {
+          "metric": "system_cpu_usage",
+          "legend": "CPU Usage %"
+        },
+        {
+          "metric": "system_memory_usage",
+          "legend": "Memory Usage %"
+        },
+        {
+          "metric": "system_network_io",
+          "legend": "Network I/O"
+        }
+      ],
+      "gridPos": {"h": 8, "w": 12, "x": 12, "y": 0}
+    },
+    {
+      "id": 3,
+      "title": "Trading Signals",
+      "type": "table",
+      "targets": [
+        {
+          "metric": "signals_generated_total",
+          "legend": "Signals Generated"
+        },
+        {
+          "metric": "signals_executed_total",
+          "legend": "Signals Executed"
+        },
+        {
+          "metric": "signals_success_rate",
+          "legend": "Success Rate"
+        }
+      ],
+      "gridPos": {"h": 8, "w": 24, "x": 0, "y": 8}
+    },
+    {
+      "id": 4,
+      "title": "Correlation Analysis",
+      "type": "heatmap",
+      "targets": [
+        {
+          "metric": "correlation_matrix",
+          "legend": "Asset Correlation"
+        }
+      ],
+      "gridPos": {"h": 8, "w": 12, "x": 0, "y": 16}
+    },
+    {
+      "id": 5,
+      "title": "Risk Metrics",
+      "type": "gauge",
+      "targets": [
+        {
+          "metric": "risk_current_drawdown",
+          "legend": "Current Drawdown %",
+          "thresholds": [5, 10, 20]
+        },
+        {
+          "metric": "risk_var_daily",
+          "legend": "Daily VaR",
+          "thresholds": [2, 5, 10]
+        }
+      ],
+      "gridPos": {"h": 8, "w": 12, "x": 12, "y": 16}
+    },
+    {
+      "id": 6,
+      "title": "Error Logs",
+      "type": "logs",
+      "targets": [
+        {
+          "metric": "logs_error",
+          "legend": "Error Logs"
+        }
+      ],
+      "gridPos": {"h": 8, "w": 24, "x": 0, "y": 24}
+    }
+  ],
+  "alerts": [
+    {
+      "name": "High Drawdown Alert",
+      "condition": "risk_current_drawdown > 10",
+      "severity": "critical",
+      "notification_channels": ["telegram", "email"]
+    },
+    {
+      "name": "System Memory Alert",
+      "condition": "system_memory_usage > 85",
+      "severity": "warning",
+      "notification_channels": ["telegram"]
+    },
+    {
+      "name": "Trading Performance Alert",
+      "condition": "trading_win_rate < 40",
+      "severity": "warning",
+      "notification_channels": ["telegram"]
+    },
+    {
+      "name": "Connection Error Alert",
+      "condition": "binance_connection_errors > 5",
+      "severity": "critical",
+      "notification_channels": ["telegram", "email"]
+    }
+  ],
+  "variables": [
+    {
+      "name": "timeRange",
+      "type": "interval",
+      "options": ["5m", "15m", "1h", "4h", "1d", "7d"],
+      "default": "1h"
+    },
+    {
+      "name": "tradingPair",
+      "type": "query",
+      "query": "SHOW TAG VALUES FROM \"trading_signals\" WITH KEY = \"pair\"",
+      "multi": true
+    }
+  ]
+}

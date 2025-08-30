@@ -7,6 +7,41 @@
   "deploy": {
     "startCommand": "python main.py",
     "restartPolicyType": "ON_FAILURE",
-    "restartPolicyMaxRetries": 10
+    "restartPolicyMaxRetries": 5,
+    "healthcheckPath": "/health",
+    "healthcheckTimeout": 300
+  },
+  "environments": {
+    "production": {
+      "variables": {
+        "ENVIRONMENT": "production",
+        "LOG_LEVEL": "INFO",
+        "TRADING_MODE": "live",
+        "RISK_LEVEL": "conservative",
+        "MAX_POSITION_SIZE": "0.1",
+        "STOP_LOSS_PERCENTAGE": "2.0",
+        "TAKE_PROFIT_PERCENTAGE": "3.0"
+      }
+    },
+    "staging": {
+      "variables": {
+        "ENVIRONMENT": "staging",
+        "LOG_LEVEL": "DEBUG",
+        "TRADING_MODE": "testnet",
+        "RISK_LEVEL": "moderate"
+      }
+    }
+  },
+  "monitoring": {
+    "alerts": {
+      "deployment": true,
+      "memory": true,
+      "cpu": true,
+      "errors": true
+    },
+    "metrics": {
+      "enabled": true,
+      "retention": "7d"
+    }
   }
 }

@@ -30,6 +30,7 @@ try:
     from utils.logger import setup_logger
     from core.environment_manager import environment_manager, Environment
     from core.data_authenticity_validator import authenticity_validator
+    from api.health import run_health_server_thread
 except ImportError as e:
     print(f"[ERROR] Error importing modules: {e}")
     print("Please install dependencies with: pip install -r requirements.txt")
@@ -147,6 +148,11 @@ def signal_handler(signum, frame):
 
 async def main():
     global bot
+    
+    # Start health check server for Railway
+    health_port = int(os.getenv("HEALTH_CHECK_PORT", 8080))
+    logger.info(f"Starting health check server on port {health_port}")
+    run_health_server_thread(health_port)
     
     # Create bot instance
     bot = TradingBot()

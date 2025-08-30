@@ -1,0 +1,50 @@
+{
+  "timestamp": "2025-08-30T09:18:08.964513",
+  "overall_success_rate": 95.45454545454545,
+  "total_tests": 22,
+  "total_passed": 21,
+  "total_failed": 1,
+  "test_results": {
+    "API Connectivity": {
+      "tests_run": 6,
+      "tests_passed": 6,
+      "tests_failed": 0,
+      "success_rate": 100.0,
+      "failures": []
+    },
+    "Correlation Engine": {
+      "tests_run": 5,
+      "tests_passed": 5,
+      "tests_failed": 0,
+      "success_rate": 100.0,
+      "failures": []
+    },
+    "Risk Manager": {
+      "tests_run": 5,
+      "tests_passed": 5,
+      "tests_failed": 0,
+      "success_rate": 100.0,
+      "failures": []
+    },
+    "Integration": {
+      "tests_run": 4,
+      "tests_passed": 3,
+      "tests_failed": 1,
+      "success_rate": 75.0,
+      "failures": [
+        [
+          "Railway Deployment Files",
+          "Files: ['railway.json', 'Dockerfile', 'requirements-minimal.txt']"
+        ]
+      ]
+    },
+    "Performance": {
+      "tests_run": 2,
+      "tests_passed": 2,
+      "tests_failed": 0,
+      "success_rate": 100.0,
+      "failures": []
+    }
+  },
+  "deployment_ready": true
+}

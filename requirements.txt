@@ -14,9 +14,9 @@ aiohttp==3.9.1
 sqlalchemy==2.0.23
 redis==5.0.1
 
-# UI
-PyQt6==6.6.0
-pyqtgraph==0.13.3
+# UI (Optional - uncomment for local GUI)
+# PyQt6==6.6.0
+# pyqtgraph==0.13.3
 plotly==5.18.0
 
 # Technical Analysis
@@ -27,6 +27,14 @@ python-dotenv==1.0.0
 pyyaml==6.0.1
 colorlog==6.8.0
 schedule==1.2.0
+
+# Health Check & Monitoring
+flask==3.0.0
+psutil==5.9.6
+requests==2.31.0
+
+# Security
+cryptography==41.0.7
 
 # Testing
 pytest==7.4.3
