@@ -1,0 +1,30 @@
+strategies:
+  correlation_mean_reversion:
+    enabled: true
+    params:
+      correlation_period: 50
+      deviation_threshold: 0.15
+      z_score_entry: 2.0
+      z_score_exit: 0.5
+      max_holding_period: 600
+      
+  pair_trading:
+    enabled: true
+    params:
+      cointegration_pvalue: 0.05
+      hedge_ratio_window: 100
+      entry_threshold: 2.5
+      exit_threshold: 0.0
+
+risk_limits:
+  max_daily_loss: 0.05
+  max_position_size: 0.1
+  max_correlation_exposure: 0.3
+  
+execution:
+  order_types:
+    - MARKET
+    - LIMIT
+    - STOP_MARKET
+  smart_routing: true
+  time_in_force: IOC

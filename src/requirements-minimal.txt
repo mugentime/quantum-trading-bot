@@ -1,0 +1,7 @@
+# Minimal dependencies for Railway deployment
+aiohttp==3.9.1
+pandas==2.1.4
+numpy==1.24.3
+python-dotenv==1.0.0
+
+# Only essential packages - 95% dependency reduction from original

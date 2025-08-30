@@ -1,0 +1,18 @@
+# Task ID: 3
+# Title: Implement SignalGenerator Logic
+# Status: done
+# Dependencies: 2
+# Priority: high
+# Description: Create intelligent signal generation based on correlation deviations and market analysis
+# Details:
+Generate trading signals when correlations deviate significantly from historical norms. Implement:
+- Deviation threshold detection using statistical significance
+- Signal confidence scoring based on correlation strength and p-values
+- Multi-timeframe analysis integration for signal validation
+- False positive filtering using multiple confirmation criteria
+- Signal types: correlation_breakdown, mean_reversion, momentum_continuation
+- Integration with CorrelationEngine outputs and market regime analysis
+- Risk-adjusted position sizing recommendations
+
+# Test Strategy:
+Backtest with historical correlation data, validate signal quality with precision/recall metrics, test false positive rates

@@ -1,0 +1,17 @@
+# Task ID: 2
+# Title: Complete CorrelationEngine Implementation
+# Status: done
+# Dependencies: 1
+# Priority: high
+# Description: Implement the correlation calculation algorithms and deviation detection for multi-symbol analysis
+# Details:
+The CorrelationEngine needs to calculate real-time correlations between trading pairs and detect when correlations break down. Implement:
+- Multi-symbol correlation matrix calculation using pandas/numpy
+- Rolling window correlation updates for efficiency
+- Statistical significance testing for correlation strength
+- Memory-efficient calculations for real-time processing
+- Correlation breakdown detection algorithms
+- Integration with DataCollector for live data feeds
+
+# Test Strategy:
+Unit tests with known correlation data, performance benchmarks, and validation against statistical libraries
