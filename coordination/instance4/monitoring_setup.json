@@ -1,0 +1,101 @@
+{
+  "instance_4_monitoring_setup": {
+    "timestamp": "2025-01-30T10:20:00Z",
+    "assigned_role": "Documentation & Deployment Manager", 
+    "status": "monitoring_ready",
+    "telegram_configuration": {
+      "bot_token": "8220024038:AAF9pY8vb6CkOjWSu0vXTzYVUNfpMiGEGZA",
+      "chat_id": "1828005335",
+      "startup_command": "python send_startup_notification.py",
+      "test_command": "python debug_telegram.py"
+    },
+    "monitoring_commands": [
+      {
+        "name": "System Status Reporter",
+        "command": "python status_report.py --interval=300",
+        "purpose": "5-minute system health checks",
+        "output": "coordination/logs/system_status.log"
+      },
+      {
+        "name": "Hourly Status Reporter", 
+        "command": "python hourly_status_reporter.py",
+        "purpose": "Comprehensive hourly reports",
+        "output": "coordination/reports/hourly_status.json"
+      },
+      {
+        "name": "Position Sync Monitor",
+        "command": "python manual_position_sync.py --monitor",
+        "purpose": "Track position synchronization", 
+        "output": "live_positions_sync.json"
+      },
+      {
+        "name": "Account Balance Checker",
+        "command": "python check_real_balance.py --alert-threshold=19000",
+        "purpose": "Monitor account balance changes",
+        "output": "coordination/logs/balance_alerts.log"
+      }
+    ],
+    "documentation_tasks": [
+      {
+        "task": "API Endpoint Documentation",
+        "status": "pending",
+        "output_file": "docs/api_documentation.md",
+        "description": "Document all Flask API endpoints and WebSocket events"
+      },
+      {
+        "task": "Deployment Procedures Manual",
+        "status": "pending", 
+        "output_file": "docs/deployment_manual.md",
+        "description": "Step-by-step deployment and recovery procedures"
+      },
+      {
+        "task": "Performance Metrics Dashboard",
+        "status": "pending",
+        "output_file": "docs/performance_dashboard.html",
+        "description": "HTML dashboard for monitoring key metrics"
+      },
+      {
+        "task": "Risk Management Report",
+        "status": "pending",
+        "output_file": "coordination/reports/risk_assessment.json", 
+        "description": "Current risk exposure and recommendations"
+      }
+    ],
+    "alert_configuration": {
+      "critical_alerts": [
+        "Bot stopped unexpectedly",
+        "Account balance < $19,000 USDT",
+        "API connection failure > 5 minutes",
+        "Position loss > $500 USDT",
+        "System error rate > 10%"
+      ],
+      "warning_alerts": [
+        "High correlation between positions > 0.8",
+        "API latency > 200ms",
+        "Memory usage > 80%",
+        "Disk space < 1GB"
+      ],
+      "info_notifications": [
+        "New trade executed",
+        "Optimization cycle completed", 
+        "Hourly performance report",
+        "Position auto-closed (profit target)"
+      ]
+    },
+    "reporting_schedule": {
+      "real_time": "WebSocket status updates",
+      "5_minutes": "System health check",
+      "15_minutes": "Position synchronization",
+      "30_minutes": "Performance evaluation", 
+      "60_minutes": "Comprehensive status report",
+      "4_hours": "Risk assessment update",
+      "24_hours": "Daily performance summary"
+    },
+    "emergency_procedures": {
+      "system_halt": "python emergency_stop.py",
+      "close_all_positions": "python close_all_positions.py", 
+      "backup_data": "python backup_trading_data.py",
+      "notify_admin": "python send_emergency_alert.py"
+    }
+  }
+}

@@ -24,28 +24,28 @@ class Config:
     CORRELATION_PERIOD = 50
     DEVIATION_THRESHOLD = 0.15
     
-    # Risk Management
-    RISK_PER_TRADE = float(os.getenv('RISK_PER_TRADE', 0.02))  # Increased from 0.01
-    MAX_CONCURRENT_POSITIONS = int(os.getenv('MAX_CONCURRENT_POSITIONS', 5))
-    DEFAULT_LEVERAGE = int(os.getenv('DEFAULT_LEVERAGE', 15))  # Increased from 10
-    MAX_LEVERAGE = int(os.getenv('MAX_LEVERAGE', 30))  # New parameter
-    MIN_LEVERAGE = int(os.getenv('MIN_LEVERAGE', 10))  # New parameter
+    # Risk Management - AGGRESSIVE SETTINGS
+    RISK_PER_TRADE = float(os.getenv('RISK_PER_TRADE', 0.15))  # INCREASED TO 15% PER TRADE
+    MAX_CONCURRENT_POSITIONS = int(os.getenv('MAX_CONCURRENT_POSITIONS', 8))  # More positions
+    DEFAULT_LEVERAGE = int(os.getenv('DEFAULT_LEVERAGE', 25))  # Higher leverage
+    MAX_LEVERAGE = int(os.getenv('MAX_LEVERAGE', 50))  # Max leverage
+    MIN_LEVERAGE = int(os.getenv('MIN_LEVERAGE', 20))  # Higher minimum
     STOP_LOSS_PERCENT = 0.02
     TAKE_PROFIT_RATIO = 2.0
     
-    # Advanced Leverage Parameters
-    MAX_DAILY_DRAWDOWN = 0.10  # 10% daily loss limit
-    MAX_POSITION_RISK = 0.03   # 3% per position with leverage
-    MAX_CORRELATION_EXPOSURE = 0.15  # Max 15% in correlated trades
-    LEVERAGE_REDUCTION_TRIGGER = 0.05  # Reduce leverage after 5% drawdown
-    MAX_MARGIN_USAGE = 0.60    # Never exceed 60% margin utilization
+    # Advanced Leverage Parameters - AGGRESSIVE MODE
+    MAX_DAILY_DRAWDOWN = 0.25  # 25% daily loss limit - AGGRESSIVE
+    MAX_POSITION_RISK = 0.15   # 15% per position with leverage - AGGRESSIVE  
+    MAX_CORRELATION_EXPOSURE = 0.50  # Max 50% in correlated trades - AGGRESSIVE
+    LEVERAGE_REDUCTION_TRIGGER = 0.15  # Reduce leverage after 15% drawdown
+    MAX_MARGIN_USAGE = 0.90    # Use 90% margin utilization - AGGRESSIVE
     
-    # Leverage Tiers based on signal strength
+    # Leverage Tiers based on signal strength - MAXIMUM AGGRESSIVE
     LEVERAGE_TIERS = {
-        'base': 15,               # Default for all trades
-        'medium_confidence': 20,  # Deviation 0.15-0.30
-        'high_confidence': 25,    # Deviation 0.30-0.50
-        'extreme_confidence': 30  # Deviation > 0.50
+        'base': 25,               # Default for all trades - INCREASED
+        'medium_confidence': 35,  # Deviation 0.15-0.30 - INCREASED
+        'high_confidence': 45,    # Deviation 0.30-0.50 - INCREASED
+        'extreme_confidence': 50  # Deviation > 0.50 - MAXIMUM
     }
     
     # Execution

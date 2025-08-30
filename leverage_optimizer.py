@@ -204,20 +204,20 @@ class LeverageOptimizer:
 def main():
     """Generate and display optimized leverage configuration"""
     print("="*60)
-    print("🚀 INTELLIGENT LEVERAGE OPTIMIZER - ANALYSIS COMPLETE")
+    print("INTELLIGENT LEVERAGE OPTIMIZER - ANALYSIS COMPLETE")
     print("="*60)
     
     optimizer = LeverageOptimizer()
     config = optimizer.generate_optimized_config()
     
     # Display summary
-    print(f"\n📊 OPTIMIZATION SUMMARY:")
+    print(f"\nOPTIMIZATION SUMMARY:")
     print(f"Total Pairs Analyzed: {config['optimization_summary']['total_pairs_analyzed']}")
     print(f"Profitable Pairs: {config['optimization_summary']['profitable_pairs']}")
     print(f"Average Return: {config['optimization_summary']['average_return']:.2f}%")
     print(f"Best Performer: {config['optimization_summary']['best_performer']}")
     
-    print(f"\n🎯 INTELLIGENT LEVERAGE ALLOCATION:")
+    print(f"\nINTELLIGENT LEVERAGE ALLOCATION:")
     print("-" * 60)
     
     # Sort by priority
@@ -225,7 +225,7 @@ def main():
                          key=lambda x: x[1]['priority'])
     
     for symbol, params in sorted_pairs:
-        risk_indicator = {"LOW": "🟢", "MEDIUM": "🟡", "HIGH": "🔴"}[params['risk_level']]
+        risk_indicator = {"LOW": "[GREEN]", "MEDIUM": "[YELLOW]", "HIGH": "[RED]"}[params['risk_level']]
         
         print(f"{symbol:10} | Leverage: {params['leverage']:2}x | "
               f"Risk: {risk_indicator} {params['risk_level']:6} | "
@@ -243,31 +243,31 @@ def main():
     with open(output_file, 'w') as f:
         json.dump(config, f, indent=2)
     
-    print(f"\n✅ Configuration saved to: {output_file}")
+    print(f"\nConfiguration saved to: {output_file}")
     
     # Trading recommendations
-    print(f"\n💡 TRADING RECOMMENDATIONS:")
+    print(f"\nTRADING RECOMMENDATIONS:")
     print("-" * 60)
     
     priority_1_pairs = [symbol for symbol, params in config['trading_pairs'].items() 
                        if params['priority'] == 1]
     
     if priority_1_pairs:
-        print(f"🎯 FOCUS ON: {', '.join(priority_1_pairs)} (Priority 1 pairs)")
+        print(f"FOCUS ON: {', '.join(priority_1_pairs)} (Priority 1 pairs)")
         print(f"   These pairs showed strong performance (>0.8 score)")
     
     conservative_pairs = [symbol for symbol, params in config['trading_pairs'].items() 
                          if params['leverage'] <= 5]
     if conservative_pairs:
-        print(f"🛡️  CONSERVATIVE: {', '.join(conservative_pairs)} (≤5x leverage)")
+        print(f"CONSERVATIVE: {', '.join(conservative_pairs)} (<=5x leverage)")
     
     aggressive_pairs = [symbol for symbol, params in config['trading_pairs'].items() 
                        if params['leverage'] >= 20]
     if aggressive_pairs:
-        print(f"⚡ AGGRESSIVE: {', '.join(aggressive_pairs)} (≥20x leverage)")
+        print(f"AGGRESSIVE: {', '.join(aggressive_pairs)} (>=20x leverage)")
         print(f"   Use tight risk management and smaller position sizes")
     
-    print(f"\n🚨 RISK MANAGEMENT REMINDERS:")
+    print(f"\nRISK MANAGEMENT REMINDERS:")
     print("- Maximum 2% account risk per trade regardless of leverage")
     print("- Higher leverage = tighter stop losses")
     print("- Monitor positions closely with high leverage")

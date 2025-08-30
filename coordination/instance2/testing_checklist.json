@@ -1,0 +1,59 @@
+{
+  "instance_2_testing_checklist": {
+    "timestamp": "2025-01-30T10:20:00Z",
+    "assigned_role": "Testing & Validation Specialist",
+    "status": "ready_to_execute",
+    "priority_tests": [
+      {
+        "test_id": "WS_001",
+        "name": "WebSocket Connection Test",
+        "target": "ws://localhost:8000",
+        "expected_result": "Connection established with <100ms latency",
+        "validation_script": "python test_websocket_connection.py",
+        "status": "pending"
+      },
+      {
+        "test_id": "API_001", 
+        "name": "Bot Status API Test",
+        "target": "GET http://localhost:8000/api/bot/status",
+        "expected_result": "JSON response with bot status, balance, positions",
+        "validation_script": "curl http://localhost:8000/api/bot/status",
+        "status": "pending"
+      },
+      {
+        "test_id": "API_002",
+        "name": "Bot Control API Test", 
+        "target": "POST http://localhost:8000/api/bot/start",
+        "expected_result": "Success response, bot status changes to 'running'",
+        "validation_script": "python test_bot_control.py",
+        "status": "pending"
+      },
+      {
+        "test_id": "INT_001",
+        "name": "Frontend-Backend Integration",
+        "target": "http://localhost:3000 → http://localhost:8000",
+        "expected_result": "Dashboard loads with real-time data",
+        "validation_script": "python test_frontend_integration.py",
+        "status": "pending"
+      }
+    ],
+    "system_integration_tests": [
+      "python test_system_quick.py - Quick system validation",
+      "python test_futures.py - Futures trading capabilities",
+      "python test_mainnet_access.py - Live API access validation",
+      "python test_correlation_engine.py - Core correlation logic"
+    ],
+    "coordination_instructions": {
+      "wait_for_backend": "Instance 1 will start backend API server on port 8000",
+      "frontend_access": "http://localhost:3000 should be accessible",
+      "report_results": "Update coordination/instance2/test_results.json",
+      "escalation": "If critical tests fail, notify Instance 1 immediately"
+    },
+    "success_criteria": {
+      "websocket_latency": "<100ms",
+      "api_response_time": "<500ms", 
+      "frontend_load_time": "<3s",
+      "data_accuracy": "100% match with Binance API"
+    }
+  }
+}

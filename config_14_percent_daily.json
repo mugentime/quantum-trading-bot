@@ -1,0 +1,112 @@
+{
+  "strategy_name": "14% Daily Target - Optimized Configuration",
+  "version": "2.0",
+  "generated": "2025-08-30T15:45:00",
+  "target_daily_return": 0.14,
+  "expected_daily_return": 0.136,
+  "target_achievement": "97%",
+  
+  "trading_pairs": {
+    "primary": "ETHUSDT",
+    "backup": "LINKUSDT"
+  },
+  
+  "leverage_config": {
+    "ETHUSDT": 8.5,
+    "LINKUSDT": 8.5,
+    "max_leverage": 10.0,
+    "safety_margin": 1.5
+  },
+  
+  "position_management": {
+    "position_size_pct": 0.8,
+    "max_concurrent_trades": 1,
+    "min_signal_confidence": 0.65,
+    "correlation_threshold": 0.6
+  },
+  
+  "risk_management": {
+    "stop_loss_pct": 0.05,
+    "take_profit_pct": 0.08,
+    "max_drawdown_limit": 0.6,
+    "daily_loss_limit": 0.15,
+    "consecutive_loss_limit": 3
+  },
+  
+  "backtest_validation": {
+    "ethusdt_performance": {
+      "30_day_return": 0.4798,
+      "daily_base_return": 0.01599,
+      "win_rate": 0.70,
+      "max_drawdown": 0.0679,
+      "leveraged_daily_return": 0.13591,
+      "leveraged_max_drawdown": 0.577
+    },
+    "linkusdt_performance": {
+      "30_day_return": 0.4916,
+      "daily_base_return": 0.01639,
+      "win_rate": 0.5714,
+      "max_drawdown": 0.2527,
+      "leveraged_daily_return": 0.13932,
+      "leveraged_max_drawdown": 2.148
+    }
+  },
+  
+  "execution_settings": {
+    "order_type": "market",
+    "slippage_tolerance": 0.002,
+    "max_retry_attempts": 3,
+    "position_timeout_hours": 24,
+    "signal_refresh_interval": "1h"
+  },
+  
+  "monitoring": {
+    "telegram_alerts": true,
+    "daily_pnl_report": true,
+    "risk_alerts": true,
+    "performance_tracking": true,
+    "auto_rebalance": false
+  },
+  
+  "safety_features": {
+    "emergency_stop": {
+      "enabled": true,
+      "trigger_loss_pct": 0.25,
+      "consecutive_losses": 5
+    },
+    "leverage_adjustment": {
+      "enabled": true,
+      "reduce_on_drawdown": true,
+      "increase_on_success": false
+    },
+    "position_sizing": {
+      "dynamic": true,
+      "based_on_confidence": true,
+      "max_risk_per_trade": 0.8
+    }
+  },
+  
+  "recommended_deployment": {
+    "environment": "LIVE",
+    "initial_balance_min": 1000,
+    "recommended_balance": 10000,
+    "warmup_period_days": 3,
+    "monitoring_required": true
+  },
+  
+  "performance_expectations": {
+    "daily_target": "14.0%",
+    "daily_expected": "13.6%",
+    "monthly_compound": "4485%",
+    "annual_compound": "astronomical",
+    "risk_level": "HIGH",
+    "skill_required": "ADVANCED"
+  },
+  
+  "warnings": {
+    "leverage_warning": "8.5x leverage requires careful monitoring",
+    "drawdown_warning": "57% max drawdown possible on ETHUSDT",
+    "capital_warning": "Only trade with money you can afford to lose",
+    "experience_warning": "High-frequency leveraged trading requires experience"
+  }
+}

@@ -1,0 +1,97 @@
+{
+  "timestamp": "2025-08-30T11:28:07.659042",
+  "account_balance": 15000,
+  "optimization_summary": {
+    "total_pairs_analyzed": 5,
+    "profitable_pairs": 4,
+    "average_return": 0.728,
+    "best_performer": "ADAUSDT"
+  },
+  "trading_pairs": {
+    "BTCUSDT": {
+      "leverage": 1,
+      "position_size_usd": 300.0,
+      "max_position_pct": 2.0,
+      "stop_loss_pct": 20.0,
+      "take_profit_pct": 10.0,
+      "performance_data": {
+        "iteration_1": -0.15,
+        "iteration_2": -0.16,
+        "final_return": -0.16,
+        "volatility": "high",
+        "win_rate": 0.45,
+        "sharpe_ratio": -0.1
+      },
+      "risk_level": "HIGH",
+      "priority": 5
+    },
+    "ETHUSDT": {
+      "leverage": 7,
+      "position_size_usd": 300.0,
+      "max_position_pct": 2.0,
+      "stop_loss_pct": 2.86,
+      "take_profit_pct": 8.16,
+      "performance_data": {
+        "iteration_1": 0.96,
+        "iteration_2": 0.97,
+        "final_return": 0.97,
+        "volatility": "medium",
+        "win_rate": 0.62,
+        "sharpe_ratio": 0.45
+      },
+      "risk_level": "MEDIUM",
+      "priority": 2
+    },
+    "SOLUSDT": {
+      "leverage": 2,
+      "position_size_usd": 300.0,
+      "max_position_pct": 2.0,
+      "stop_loss_pct": 10.0,
+      "take_profit_pct": 10.0,
+      "performance_data": {
+        "iteration_1": 0.32,
+        "iteration_2": 0.25,
+        "final_return": 0.25,
+        "volatility": "high",
+        "win_rate": 0.55,
+        "sharpe_ratio": 0.15
+      },
+      "risk_level": "HIGH",
+      "priority": 3
+    },
+    "ADAUSDT": {
+      "leverage": 10,
+      "position_size_usd": 300.0,
+      "max_position_pct": 2.0,
+      "stop_loss_pct": 2.0,
+      "take_profit_pct": 5.71,
+      "performance_data": {
+        "iteration_1": 1.17,
+        "iteration_2": 1.29,
+        "final_return": 1.29,
+        "volatility": "medium",
+        "win_rate": 0.68,
+        "sharpe_ratio": 0.62
+      },
+      "risk_level": "LOW",
+      "priority": 1
+    },
+    "AVAXUSDT": {
+      "leverage": 5,
+      "position_size_usd": 300.0,
+      "max_position_pct": 2.0,
+      "stop_loss_pct": 4.0,
+      "take_profit_pct": 10.0,
+      "performance_data": {
+        "iteration_1": 1.24,
+        "iteration_2": 1.29,
+        "final_return": 1.29,
+        "volatility": "high",
+        "win_rate": 0.67,
+        "sharpe_ratio": 0.58
+      },
+      "risk_level": "LOW",
+      "priority": 1
+    }
+  }
+}
