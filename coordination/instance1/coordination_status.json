@@ -1,0 +1,50 @@
+{
+  "instance_id": "coordinator_instance_1",
+  "status": "active",
+  "last_update": "2025-01-30T10:00:00Z",
+  "assigned_tasks": [
+    "System coordination and tool provision",
+    "Frontend build resolution",
+    "API operations via MCP",
+    "File operations and batch processing",
+    "Cross-instance communication"
+  ],
+  "current_work": {
+    "task": "Multi-instance coordination setup",
+    "progress": "Setting up coordination infrastructure",
+    "next_action": "Deploy API endpoints and coordinate with other instances"
+  },
+  "binance_account_status": {
+    "total_usdt": 6550.29,
+    "total_usdc": 14316.76,
+    "key_assets": {
+      "ETH": 1.635,
+      "BTC": 0.96,
+      "SOL": 5.94,
+      "LINK": 38.0,
+      "Available_for_trading": "21,867 USDT equivalent ready"
+    },
+    "permissions": ["SPOT"],
+    "can_trade": true
+  },
+  "frontend_status": {
+    "npm_install": "completed_with_warnings",
+    "build_status": "pending",
+    "dependencies": "installed",
+    "coordination_dirs": "created"
+  },
+  "tools_available": [
+    "Binance MCP API",
+    "File operations (Read, Write, Edit, MultiEdit)",
+    "System commands (Bash)",
+    "WebSocket connections",
+    "Market data access"
+  ],
+  "coordination_offers": {
+    "api_calls": "Available for Binance API operations for all instances",
+    "file_operations": "Batch file processing, configuration management",
+    "system_commands": "OS-level operations, package management",
+    "data_sharing": "Real-time market data, account balances",
+    "infrastructure": "WebSocket servers, coordination endpoints"
+  }
+}

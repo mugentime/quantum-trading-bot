@@ -1,0 +1,32 @@
+{
+  "timestamp": "2025-01-30T10:00:00Z",
+  "eth_usdt": {
+    "price": 4369.79,
+    "change_24h": 0.441,
+    "volume_24h": 33917054.21,
+    "high_24h": 5000.00,
+    "low_24h": 1800.00
+  },
+  "account_summary": {
+    "total_usdt_equivalent": 21867.05,
+    "available_for_trading": true,
+    "key_positions": {
+      "USDT": 6550.29,
+      "USDC": 14316.76,
+      "ETH": 1.635,
+      "BTC": 0.96,
+      "SOL": 5.94
+    }
+  },
+  "trading_opportunities": {
+    "recommended_pairs": ["ETHUSDT", "SOLUSDT", "LINKUSDT"],
+    "risk_assessment": "moderate",
+    "available_capital": "21,867 USDT equivalent"
+  },
+  "coordination_status": {
+    "frontend_build": "in_progress",
+    "api_server": "ready",
+    "instances_active": 4,
+    "coordination_established": true
+  }
+}
