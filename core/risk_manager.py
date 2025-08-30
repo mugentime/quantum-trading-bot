@@ -47,11 +47,11 @@ class RiskManager:
                 })
                 return validation_result
             
-            # Check daily loss limits
+            # Check daily loss limits - ADJUSTED FOR 14% TARGET
             if leverage_manager.daily_pnl < -config.MAX_DAILY_DRAWDOWN * account_balance:
                 validation_result['warnings'].append('Daily drawdown limit approached')
-                validation_result['adjustments']['reduce_position_size'] = 0.5
-                validation_result['risk_score'] += 0.3
+                validation_result['adjustments']['reduce_position_size'] = 0.6  # Less aggressive for 14%
+                validation_result['risk_score'] += 0.25
             
             # Check position concentration
             symbol = signal.get('symbol', '')
@@ -61,22 +61,24 @@ class RiskManager:
                 validation_result['adjustments']['max_position_size'] = correlation_risk['max_allowed']
                 validation_result['risk_score'] += 0.2
             
-            # Check margin requirements
+            # Check margin requirements - OPTIMIZED FOR 8.5X LEVERAGE
             estimated_margin = self._calculate_margin_requirement(
                 account_balance, position_size, proposed_leverage
             )
             
             if estimated_margin > config.MAX_MARGIN_USAGE * account_balance:
                 validation_result['warnings'].append('High margin usage detected')
-                validation_result['adjustments']['reduce_leverage'] = max(10, int(proposed_leverage * 0.8))
-                validation_result['risk_score'] += 0.25
-            
-            # Check leverage safety
-            safe_leverage = leverage_manager.calculate_safe_leverage(account_balance, symbol)
-            if proposed_leverage > safe_leverage * 1.2:
-                validation_result['warnings'].append(f'Leverage exceeds safe limit: {safe_leverage}x')
-                validation_result['adjustments']['max_leverage'] = safe_leverage
+                validation_result['adjustments']['reduce_leverage'] = max(8, int(proposed_leverage * 0.9))  # Adjusted for 8.5x base
                 validation_result['risk_score'] += 0.2
+            
+            # Check leverage safety - FOCUSED ON 8.5X ETHUSDT
+            safe_leverage = leverage_manager.calculate_safe_leverage(account_balance, symbol)
+            # Allow slightly higher leverage for ETHUSDT given its performance
+            leverage_multiplier = 1.3 if symbol == 'ETHUSDT' else 1.1
+            if proposed_leverage > safe_leverage * leverage_multiplier:
+                validation_result['warnings'].append(f'Leverage exceeds safe limit: {safe_leverage}x')
+                validation_result['adjustments']['max_leverage'] = int(safe_leverage * leverage_multiplier)
+                validation_result['risk_score'] += 0.15
             
             # Check signal quality
             signal_risk = self._assess_signal_risk(signal)
@@ -85,20 +87,20 @@ class RiskManager:
             if signal_risk > 0.3:
                 validation_result['warnings'].append('Low confidence signal detected')
             
-            # Check trading frequency
+            # Check trading frequency - REDUCED FOR SINGLE PAIR FOCUS
             if self._check_overtrading():
                 validation_result['warnings'].append('High trading frequency detected')
-                validation_result['adjustments']['delay_minutes'] = 5
-                validation_result['risk_score'] += 0.15
+                validation_result['adjustments']['delay_minutes'] = 3  # Shorter delay for single pair
+                validation_result['risk_score'] += 0.1
             
-            # Final risk assessment
-            if validation_result['risk_score'] > 0.7:
+            # Final risk assessment - ADJUSTED FOR 14% TARGET STRATEGY
+            if validation_result['risk_score'] > 0.75:  # Slightly higher threshold
                 validation_result.update({
                     'approved': False,
                     'reason': f'Risk score too high: {validation_result["risk_score"]:.2f}'
                 })
-            elif validation_result['risk_score'] > 0.5:
-                validation_result['warnings'].append('High risk trade - proceed with caution')
+            elif validation_result['risk_score'] > 0.55:  # Adjusted warning threshold
+                validation_result['warnings'].append('Moderate risk trade - proceed with enhanced monitoring')
             
             return validation_result
             

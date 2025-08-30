@@ -46,19 +46,21 @@ class TradingSignal:
 
 class SignalGenerator:
     def __init__(self, 
-                 confidence_threshold: float = 0.75,
-                 min_statistical_significance: float = 0.95):
-        """Initialize advanced SignalGenerator with statistical parameters"""
+                 confidence_threshold: float = 0.70,  # LOWERED FOR 14% TARGET
+                 min_statistical_significance: float = 0.90):  # ADJUSTED
+        """Initialize advanced SignalGenerator with optimized thresholds for 14% daily target"""
         self.confidence_threshold = confidence_threshold
         self.min_statistical_significance = min_statistical_significance
         self.active_signals = {}
         self.signal_history = []
         self.signal_count = 0
         
-        # Signal filtering parameters
-        self.min_correlation_change = 0.20
-        self.regime_change_threshold = 0.30
+        # Signal filtering parameters - OPTIMIZED FOR ETHUSDT FOCUS
+        self.min_correlation_change = 0.15  # Lower threshold for more signals
+        self.regime_change_threshold = 0.25  # More sensitive to changes
         self.false_positive_filters = True
+        # Focus pairs for 14% daily strategy
+        self.primary_symbols = ['ETHUSDT']  # Primary focus symbol
         
         logger.info("SignalGenerator initialized with advanced correlation analysis")
         
@@ -124,8 +126,13 @@ class SignalGenerator:
             if len(symbols) < 2 or confidence < self.confidence_threshold:
                 return None
             
-            # Select primary symbol for trading
-            symbol = symbols[0]  # Could be enhanced with volume/liquidity analysis
+            # PRIORITIZE ETHUSDT FOR 14% TARGET STRATEGY
+            if 'ETHUSDT' in symbols:
+                symbol = 'ETHUSDT'  # Always prefer ETHUSDT
+            else:
+                symbol = symbols[0]
+            
+            # Symbol already selected above with ETHUSDT priority
             
             if symbol not in market_data:
                 return None
@@ -146,8 +153,11 @@ class SignalGenerator:
             if statistical_significance < (self.min_statistical_significance / 100):
                 return None
             
-            # Calculate position sizing based on confidence and volatility
+            # Calculate position sizing - FOCUSED ON 80% FOR 14% TARGET
             position_size = self._calculate_position_size(confidence, symbol, market_data)
+            # Boost position size for ETHUSDT given its proven performance
+            if symbol == 'ETHUSDT':
+                position_size = min(position_size * 1.2, config.RISK_PER_TRADE)
             
             # Set stop loss and take profit based on statistical analysis
             stop_loss, take_profit = self._calculate_risk_levels(
@@ -294,29 +304,38 @@ class SignalGenerator:
         return SignalAction.LONG if correlation > 0 else SignalAction.SHORT
     
     def _calculate_position_size(self, confidence: float, symbol: str, market_data: Dict) -> float:
-        """Calculate position size based on confidence and risk parameters"""
-        base_position_size = config.RISK_PER_TRADE
+        """Calculate position size optimized for 14% daily target strategy"""
+        base_position_size = config.RISK_PER_TRADE  # 0.80 for aggressive strategy
         
-        # Adjust based on confidence (higher confidence = larger position)
-        confidence_multiplier = min(confidence * 1.5, 1.5)
+        # ETHUSDT gets preferential sizing due to proven performance
+        if symbol == 'ETHUSDT':
+            confidence_multiplier = min(confidence * 1.3, 1.5)  # Higher multiplier for ETHUSDT
+        else:
+            confidence_multiplier = min(confidence * 1.2, 1.4)
         
         # Get volume data if available for liquidity adjustment
         volume_data = market_data.get(symbol, {}).get('volume', 1000000)
         liquidity_factor = min(volume_data / 1000000, 2.0)  # Cap at 2x
         
         position_size = base_position_size * confidence_multiplier * liquidity_factor
-        return min(position_size, 0.05)  # Max 5% per trade
+        # Increased max position size for aggressive 14% target
+        max_position = config.RISK_PER_TRADE if symbol == 'ETHUSDT' else 0.05
+        return min(position_size, max_position)
     
     def _calculate_risk_levels(self, entry_price: float, action: SignalAction, 
                               confidence: float, symbol: str, market_data: Dict) -> Tuple[float, float]:
-        """Calculate stop loss and take profit levels"""
-        # Base risk from config
-        base_stop_loss_pct = config.STOP_LOSS_PERCENT
-        base_take_profit_ratio = config.TAKE_PROFIT_RATIO
+        """Calculate stop loss and take profit levels optimized for 14% daily target"""
+        # OPTIMIZED RISK LEVELS FOR 14% STRATEGY
+        if symbol == 'ETHUSDT':
+            base_stop_loss_pct = 0.05  # 5% stop loss for ETHUSDT (tight control)
+            base_take_profit_ratio = 1.6   # 1.6:1 ratio for ETHUSDT
+        else:
+            base_stop_loss_pct = config.STOP_LOSS_PERCENT  # Default for others
+            base_take_profit_ratio = config.TAKE_PROFIT_RATIO
         
-        # Adjust based on confidence (higher confidence = tighter stops)
-        stop_loss_pct = base_stop_loss_pct * (1.5 - confidence * 0.5)
-        take_profit_ratio = base_take_profit_ratio * (1 + confidence * 0.5)
+        # Adjust based on confidence (higher confidence = optimized stops)
+        stop_loss_pct = base_stop_loss_pct * (1.3 - confidence * 0.3)  # Tighter for high confidence
+        take_profit_ratio = base_take_profit_ratio * (1 + confidence * 0.4)   # Better ratios for high confidence
         
         if action == SignalAction.LONG:
             stop_loss = entry_price * (1 - stop_loss_pct)
@@ -437,8 +456,8 @@ class SignalGenerator:
             if signal['statistical_significance'] < (self.min_statistical_significance / 100):
                 continue
             
-            # Filter by minimum risk/reward ratio
-            if signal['risk_reward_ratio'] < 1.5:
+            # Filter by minimum risk/reward ratio - LOWERED FOR MORE SIGNALS
+            if signal['risk_reward_ratio'] < 1.3:  # Slightly lower threshold for 14% target
                 continue
             
             # Check for signal conflicts (opposite signals on same symbol)

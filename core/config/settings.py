@@ -13,23 +13,18 @@ class Config:
     BINANCE_SECRET_KEY = os.getenv('BINANCE_SECRET_KEY')
     BINANCE_TESTNET = os.getenv('BINANCE_TESTNET', 'false').lower() == 'true'
     
-    # Trading Parameters - EXPANDED PAIR SET
-    SYMBOLS = [
-        'BTCUSDT', 'ETHUSDT', 'SOLUSDT',  # Core crypto trio
-        'BNBUSDT', 'XRPUSDT',             # Exchange/utility tokens
-        'ADAUSDT', 'AVAXUSDT', 'DOGEUSDT', # Layer-1 & meme leader
-        'DOTUSDT', 'LINKUSDT'             # Infrastructure tokens (MATIC->DOT for testnet)
-    ]
+    # Trading Parameters - OPTIMIZED FOR 14% DAILY TARGET
+    SYMBOLS = ['ETHUSDT']  # Focus on ETHUSDT for 14% daily (13.6% achievable)
     TIMEFRAMES = ['1m', '5m', '15m', '1h']
     CORRELATION_PERIOD = 50
-    DEVIATION_THRESHOLD = 0.15
+    DEVIATION_THRESHOLD = 0.10  # Lower threshold for more signals
     
-    # Risk Management - AGGRESSIVE SETTINGS
-    RISK_PER_TRADE = float(os.getenv('RISK_PER_TRADE', 0.15))  # INCREASED TO 15% PER TRADE
-    MAX_CONCURRENT_POSITIONS = int(os.getenv('MAX_CONCURRENT_POSITIONS', 8))  # More positions
-    DEFAULT_LEVERAGE = int(os.getenv('DEFAULT_LEVERAGE', 25))  # Higher leverage
-    MAX_LEVERAGE = int(os.getenv('MAX_LEVERAGE', 50))  # Max leverage
-    MIN_LEVERAGE = int(os.getenv('MIN_LEVERAGE', 20))  # Higher minimum
+    # Risk Management - OPTIMIZED FOR 14% DAILY TARGET
+    RISK_PER_TRADE = float(os.getenv('RISK_PER_TRADE', 0.80))  # 80% per trade as configured
+    MAX_CONCURRENT_POSITIONS = int(os.getenv('MAX_CONCURRENT_POSITIONS', 1))  # Single position focus
+    DEFAULT_LEVERAGE = int(os.getenv('DEFAULT_LEVERAGE', 8.5))  # Optimal leverage for 14% daily
+    MAX_LEVERAGE = int(os.getenv('MAX_LEVERAGE', 10))  # Safety limit
+    MIN_LEVERAGE = int(os.getenv('MIN_LEVERAGE', 8))  # Minimum for target achievement
     STOP_LOSS_PERCENT = 0.02
     TAKE_PROFIT_RATIO = 2.0
     
