@@ -154,7 +154,7 @@ class Executor:
             
             # Generate enhanced signal using optimization system
             enhanced_signal = await optimization_integrator.generate_enhanced_signal(
-                signal, ['ETHUSDT', 'SOLUSDT', 'BTCUSDT'], self.exchange
+                signal, config.SYMBOLS + ['BTCUSDT'], self.exchange
             )
             
             # Use enhanced signal if available

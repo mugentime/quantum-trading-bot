@@ -113,7 +113,7 @@ class ScalpingCorrelationEngine:
         
         # Primary scalping pairs (high liquidity, tight spreads)
         self.scalping_pairs = [
-            'BTCUSDT', 'ETHUSDT', 'SOLUSDT', 'BNBUSDT', 'XRPUSDT'
+            'BTCUSDT', 'ETHUSDT', 'AXSUSDT', 'SOLUSDT', 'BNBUSDT', 'XRPUSDT'
         ]
         
         # Reference pairs for correlation analysis

@@ -39,7 +39,7 @@ class ScalpingTradingBot:
         logger.info("Initializing Scalping Trading Bot...")
         
         # Core components
-        self.data_collector = DataCollector()
+        self.data_collector = DataCollector(config.SYMBOLS)
         self.correlation_engine = CorrelationEngine()
         self.signal_generator = SignalGenerator(
             confidence_threshold=scalping_config.parameters.CONFIDENCE_THRESHOLD,

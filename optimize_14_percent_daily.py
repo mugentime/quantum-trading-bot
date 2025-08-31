@@ -10,6 +10,7 @@ from datetime import datetime, timedelta
 from core.data_collector import DataCollector
 from core.correlation_engine import CorrelationEngine
 from core.signal_generator import SignalGenerator
+from core.config.settings import config
 import ccxt.async_support as ccxt
 
 # Configure logging
@@ -22,10 +23,10 @@ class OptimizedBacktester:
         self.target_daily_return = 0.14  # 14%
         
         # Optimized configuration based on analysis
-        self.focus_pairs = ['ETHUSDT', 'LINKUSDT']
+        self.focus_pairs = ['ETHUSDT', 'AXSUSDT']  # Include AXSUSDT for 620% monthly target
         self.leverage_config = {
             'ETHUSDT': 8.5,  # Lower risk, higher win rate
-            'LINKUSDT': 8.5   # Backup option
+            'AXSUSDT': 8.5   # AXSUSDT for ultra-high frequency trading
         }
         
         # Risk management
@@ -35,7 +36,7 @@ class OptimizedBacktester:
         self.take_profit_pct = 0.08  # 8% take profit
         
         # Initialize components
-        self.data_collector = DataCollector()
+        self.data_collector = DataCollector(config.SYMBOLS)
         self.correlation_engine = CorrelationEngine()
         self.signal_generator = SignalGenerator()
         

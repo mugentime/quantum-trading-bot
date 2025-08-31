@@ -42,15 +42,16 @@ class EnhancedCorrelationEngine:
     def __init__(self, exchange):
         self.exchange = exchange
         self.pairs = [
-            'BTCUSDT', 'ETHUSDT', 'SOLUSDT',    # Core crypto trio
-            'BNBUSDT', 'XRPUSDT',               # Exchange/utility tokens  
-            'ADAUSDT', 'AVAXUSDT', 'DOGEUSDT',  # Layer-1 & meme leader
-            'DOTUSDT', 'LINKUSDT'               # Infrastructure tokens
+            'BTCUSDT', 'ETHUSDT', 'AXSUSDT', 'SOLUSDT',    # Core crypto with AXSUSDT
+            'BNBUSDT', 'XRPUSDT',                          # Exchange/utility tokens  
+            'ADAUSDT', 'AVAXUSDT', 'DOGEUSDT',             # Layer-1 & meme leader
+            'DOTUSDT', 'LINKUSDT'                          # Infrastructure tokens
         ]
         
         # Define correlation clusters based on token categories
         self.clusters = {
             'layer1_core': ['BTCUSDT', 'ETHUSDT'],
+            'gaming_high_vol': ['AXSUSDT'],  # AXSUSDT for ultra-high frequency trading
             'layer1_alt': ['SOLUSDT', 'ADAUSDT', 'AVAXUSDT'],
             'exchange_util': ['BNBUSDT', 'XRPUSDT'],
             'infrastructure': ['DOTUSDT', 'LINKUSDT'],

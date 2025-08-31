@@ -20,8 +20,9 @@ class CorrelationPairExpander:
         self.asset_groups = {
             'major_cryptos': ['BTCUSDT', 'ETHUSDT', 'BNBUSDT'],
             'defi_tokens': ['ETHUSDT', 'SOLUSDT', 'AVAXUSDT', 'MATICUSDT'],
-            'layer1s': ['ETHUSDT', 'SOLUSDT', 'AVAXUSDT', 'DOTUSDT', 'ADAUSDT'],
-            'top_alts': ['ETHUSDT', 'BNBUSDT', 'SOLUSDT', 'XRPUSDT', 'ADAUSDT']
+            'gaming_high_vol': ['AXSUSDT'],  # AXSUSDT for ultra-high frequency
+            'layer1s': ['ETHUSDT', 'AXSUSDT', 'SOLUSDT', 'AVAXUSDT', 'DOTUSDT', 'ADAUSDT'],
+            'top_alts': ['ETHUSDT', 'AXSUSDT', 'BNBUSDT', 'SOLUSDT', 'XRPUSDT', 'ADAUSDT']
         }
         
         # Expected correlation ranges for different pairs
@@ -29,6 +30,9 @@ class CorrelationPairExpander:
             ('ETHUSDT', 'BTCUSDT'): {'mean': 0.75, 'std': 0.15},
             ('SOLUSDT', 'BTCUSDT'): {'mean': 0.65, 'std': 0.20},
             ('ETHUSDT', 'SOLUSDT'): {'mean': 0.70, 'std': 0.18},
+            ('ETHUSDT', 'AXSUSDT'): {'mean': 0.45, 'std': 0.25},  # Gaming token correlation
+            ('AXSUSDT', 'SOLUSDT'): {'mean': 0.50, 'std': 0.22},
+            ('AXSUSDT', 'BTCUSDT'): {'mean': 0.60, 'std': 0.20},
             ('BNBUSDT', 'BTCUSDT'): {'mean': 0.68, 'std': 0.18},
             ('AVAXUSDT', 'SOLUSDT'): {'mean': 0.72, 'std': 0.16},
             ('MATICUSDT', 'ETHUSDT'): {'mean': 0.64, 'std': 0.22}

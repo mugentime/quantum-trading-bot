@@ -233,7 +233,7 @@ class AdvancedRiskManager:
             correlation_groups = {
                 'major_alts': ['ETHUSDT', 'BNBUSDT', 'ADAUSDT', 'DOTUSDT'],
                 'defi_tokens': ['SOLUSDT', 'AVAXUSDT', 'MATICUSDT'],
-                'layer1s': ['ETHUSDT', 'SOLUSDT', 'AVAXUSDT', 'DOTUSDT']
+                'layer1s': ['ETHUSDT', 'AXSUSDT', 'SOLUSDT', 'AVAXUSDT', 'DOTUSDT']
             }
             
             # Find which group this symbol belongs to
