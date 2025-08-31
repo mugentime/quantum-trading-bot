@@ -628,6 +628,61 @@ class RiskManager:
             logger.info("Emergency mode reset - Trading resumed")
         except Exception as e:
             logger.error(f"Error resetting emergency mode: {e}")
+    
+    def filter_signals(self, signals: List[Dict]) -> List[Dict]:
+        """
+        Filter trading signals based on risk management rules
+        Compatible with ultra-high frequency trading system
+        """
+        if not signals:
+            return []
+        
+        try:
+            filtered_signals = []
+            
+            for signal in signals:
+                # Skip if emergency mode active
+                if self.emergency_mode:
+                    logger.warning("Emergency mode active - filtering out all signals")
+                    continue
+                
+                # Basic signal validation
+                if not isinstance(signal, dict):
+                    logger.warning("Invalid signal format - skipping")
+                    continue
+                
+                # Check required signal fields
+                required_fields = ['symbol', 'action', 'confidence', 'price']
+                if not all(field in signal for field in required_fields):
+                    logger.warning(f"Signal missing required fields: {signal}")
+                    continue
+                
+                # Skip low confidence signals
+                if signal.get('confidence', 0) < 0.3:
+                    logger.debug(f"Filtering low confidence signal: {signal['confidence']}")
+                    continue
+                
+                # Check trading frequency limits
+                if self._check_overtrading():
+                    logger.warning("Trading frequency limit reached - filtering signals")
+                    continue
+                
+                # Check daily loss limits
+                account_balance = signal.get('account_balance', 10000)  # Default fallback
+                if leverage_manager.daily_pnl < -config.MAX_DAILY_DRAWDOWN * account_balance:
+                    logger.warning("Daily loss limit reached - filtering signals")
+                    continue
+                
+                # Signal passed all filters
+                filtered_signals.append(signal)
+                logger.debug(f"Signal approved for {signal['symbol']}: confidence {signal['confidence']}")
+            
+            logger.info(f"Filtered {len(signals)} signals down to {len(filtered_signals)} approved signals")
+            return filtered_signals
+            
+        except Exception as e:
+            logger.error(f"Error filtering signals: {e}")
+            return []  # Fail safe - return empty list if error
 
 # Global instance
 risk_manager = RiskManager()

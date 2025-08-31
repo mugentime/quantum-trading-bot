@@ -21,6 +21,7 @@
     "volatility_threshold": 0.05
   },
   "volatility_detection": {
+    "volatility_threshold": 0.05,
     "daily_movement_capability": 0.2067,
     "volatility_lookback_minutes": 15,
     "momentum_threshold": 0.03,
