@@ -9,7 +9,7 @@ from datetime import datetime, timedelta
 import ccxt.async_support as ccxt
 import numpy as np
 from .config.settings import config
-from ..utils.telegram_notifier import telegram_notifier
+from utils.telegram_notifier import telegram_notifier
 from .leverage_manager import leverage_manager
 from .optimization_integrator import optimization_integrator
 from .data_authenticity_validator import authenticity_validator, DataAuthenticityError

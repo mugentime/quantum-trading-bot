@@ -13,7 +13,7 @@ from .config.settings import config
 from .leverage_manager import leverage_manager
 from .risk_manager import risk_manager
 from .volatility_manager import volatility_manager
-from ..utils.telegram_notifier import telegram_notifier
+from utils.telegram_notifier import telegram_notifier
 
 logger = logging.getLogger(__name__)
 
