@@ -183,7 +183,7 @@ class CorrelationEngine:
         opportunities = []
         
         try:
-            threshold_high = config.DEVIATION_THRESHOLD + 0.65  # ~0.8 for high correlation
+            threshold_high = 0.5  # More practical threshold for volatile crypto markets
             significance_level = 0.05  # 95% confidence
             
             for i in range(len(corr_matrix.columns)):
@@ -192,6 +192,9 @@ class CorrelationEngine:
                     symbol2 = corr_matrix.columns[j]
                     correlation = corr_matrix.iloc[i, j]
                     p_value = p_values.iloc[i, j] if p_values is not None else 1.0
+                    
+                    # Log all correlation values for monitoring
+                    logger.debug(f"CORRELATION: {symbol1}-{symbol2}: {correlation:.3f} (p={p_value:.4f})")
                     
                     # High correlation opportunity
                     if (abs(correlation) > threshold_high and 
