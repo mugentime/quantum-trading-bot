@@ -113,6 +113,22 @@ class CorrelationEngine:
             if len(returns) < 5:
                 return None, None
             
+            # Filter out symbols with constant prices (zero variance)
+            valid_symbols_for_returns = []
+            for symbol in returns.columns:
+                if np.std(returns[symbol]) > 1e-8:  # Not constant
+                    valid_symbols_for_returns.append(symbol)
+                else:
+                    logger.debug(f"Filtering out constant price symbol: {symbol}")
+            
+            if len(valid_symbols_for_returns) < 2:
+                logger.warning("Less than 2 symbols with price movement")
+                return None, None
+            
+            # Keep only symbols with movement
+            returns = returns[valid_symbols_for_returns]
+            symbols = valid_symbols_for_returns
+            
             # Calculate correlation matrix
             corr_matrix = returns.corr()
             
@@ -125,9 +141,36 @@ class CorrelationEngine:
                 for j in range(i+1, len(symbols)):
                     symbol1, symbol2 = symbols[i], symbols[j]
                     if symbol1 in returns.columns and symbol2 in returns.columns:
-                        corr, p_val = stats.pearsonr(returns[symbol1], returns[symbol2])
-                        p_values.loc[symbol1, symbol2] = p_val
-                        p_values.loc[symbol2, symbol1] = p_val
+                        try:
+                            series1 = returns[symbol1].dropna()
+                            series2 = returns[symbol2].dropna()
+                            
+                            # Check for constant arrays (zero variance)
+                            if (len(series1) < 3 or len(series2) < 3 or 
+                                np.std(series1) == 0 or np.std(series2) == 0):
+                                logger.debug(f"Skipping constant/insufficient data: {symbol1}-{symbol2}")
+                                p_values.loc[symbol1, symbol2] = 1.0  # No correlation
+                                p_values.loc[symbol2, symbol1] = 1.0
+                                corr_matrix.loc[symbol1, symbol2] = 0.0
+                                corr_matrix.loc[symbol2, symbol1] = 0.0
+                                continue
+                            
+                            corr, p_val = stats.pearsonr(series1, series2)
+                            
+                            # Handle NaN results
+                            if np.isnan(corr) or np.isnan(p_val):
+                                logger.debug(f"NaN correlation result: {symbol1}-{symbol2}")
+                                corr, p_val = 0.0, 1.0
+                            
+                            p_values.loc[symbol1, symbol2] = p_val
+                            p_values.loc[symbol2, symbol1] = p_val
+                            
+                        except Exception as e:
+                            logger.warning(f"Correlation error {symbol1}-{symbol2}: {e}")
+                            p_values.loc[symbol1, symbol2] = 1.0
+                            p_values.loc[symbol2, symbol1] = 1.0
+                            corr_matrix.loc[symbol1, symbol2] = 0.0
+                            corr_matrix.loc[symbol2, symbol1] = 0.0
             
             return corr_matrix, p_values
             
