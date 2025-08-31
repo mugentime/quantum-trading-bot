@@ -13,7 +13,7 @@
   },
   "risk_parameters": {
     "max_position_size": 0.02,
-    "leverage": 8.5,
+    "leverage": 25,
     "stop_loss_percent": 0.015,
     "take_profit_percent": 0.04,
     "max_daily_loss": 0.10,
@@ -21,7 +21,7 @@
     "volatility_threshold": 0.05
   },
   "volatility_detection": {
-    "volatility_threshold": 0.05,
+    "volatility_threshold": 0.02,
     "daily_movement_capability": 0.2067,
     "volatility_lookback_minutes": 15,
     "momentum_threshold": 0.03,
@@ -32,7 +32,7 @@
   "ultra_high_frequency": {
     "timeframes": ["1m"],
     "signal_refresh_seconds": 30,
-    "min_signal_interval": 15,
+    "min_signal_interval": 30,
     "max_trades_per_hour": 20,
     "correlation_window": 15,
     "deviation_threshold": 0.06,
