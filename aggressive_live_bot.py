@@ -37,7 +37,7 @@ class AggressiveTradingBot:
         })
         
         self.symbols = ['BTC/USDT', 'ETH/USDT', 'SOL/USDT', 'BNB/USDT', 'XRP/USDT', 
-                       'ADA/USDT', 'AVAX/USDT', 'DOT/USDT', 'LINK/USDT', 'DOGE/USDT']
+                       'ADA/USDT', 'AVAX/USDT', 'AXS/USDT', 'DOT/USDT', 'LINK/USDT', 'DOGE/USDT']
         self.running = False
         
     async def get_balance(self):
