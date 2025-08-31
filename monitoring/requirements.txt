@@ -1,0 +1,25 @@
+# Railway Bot Monitoring System Requirements
+
+# Core HTTP client
+aiohttp>=3.8.0
+
+# Rich terminal UI (optional but recommended)
+rich>=13.0.0
+
+# Data processing
+pandas>=1.5.0
+
+# For CSV and database operations (built-in modules used)
+# sqlite3 - built-in
+# csv - built-in
+# json - built-in
+
+# Already included in main project
+# colorlog>=6.0.0 - for colored logging
+# asyncio - built-in
+# datetime - built-in
+# pathlib - built-in
+
+# Optional: For enhanced visualizations
+# matplotlib>=3.5.0
+# plotly>=5.0.0

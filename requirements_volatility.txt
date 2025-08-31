@@ -1,0 +1,95 @@
+# High Volatility Pairs Trading Strategy Requirements
+# Core trading and data analysis
+ccxt>=4.1.0
+pandas>=2.0.0
+numpy>=1.24.0
+scipy>=1.10.0
+python-dotenv>=1.0.0
+
+# Async support
+aiohttp>=3.8.0
+websockets>=11.0.0
+asyncio-mqtt>=0.13.0
+
+# Technical analysis
+ta-lib>=0.4.28
+TA-Lib>=0.4.28
+talib-binary>=0.4.19
+
+# Data handling and visualization
+matplotlib>=3.7.0
+seaborn>=0.12.0
+plotly>=5.15.0
+dash>=2.13.0
+
+# Machine learning (optional for pattern recognition)
+scikit-learn>=1.3.0
+xgboost>=1.7.0
+lightgbm>=4.0.0
+
+# Monitoring and alerting
+python-telegram-bot>=20.0
+psutil>=5.9.0
+watchdog>=3.0.0
+
+# Database support (optional)
+sqlalchemy>=2.0.0
+sqlite3
+
+# Performance optimization
+numba>=0.57.0
+cython>=3.0.0
+
+# Logging and configuration
+pyyaml>=6.0
+toml>=0.10.2
+configparser>=5.3.0
+
+# Testing and quality
+pytest>=7.4.0
+pytest-asyncio>=0.21.0
+black>=23.0.0
+flake8>=6.0.0
+
+# Development tools
+jupyter>=1.0.0
+ipykernel>=6.25.0
+notebook>=7.0.0
+
+# Time handling
+pytz>=2023.3
+python-dateutil>=2.8.2
+
+# HTTP requests and APIs
+requests>=2.31.0
+urllib3>=2.0.0
+
+# Mathematical operations
+sympy>=1.12
+statsmodels>=0.14.0
+
+# File handling
+openpyxl>=3.1.0
+xlsxwriter>=3.1.0
+
+# Networking and websockets
+websocket-client>=1.6.0
+socketio>=5.8.0
+
+# Cryptography (for API security)
+cryptography>=41.0.0
+pycryptodome>=3.18.0
+
+# System monitoring
+memory-profiler>=0.61.0
+py-spy>=0.3.14
+
+# Additional utilities
+tqdm>=4.66.0
+click>=8.1.0
+rich>=13.5.0
+colorama>=0.4.6
+
+# Optional: GPU acceleration
+# cupy>=12.0.0  # Uncomment if CUDA available
+# cudf>=23.08.0  # Uncomment if RAPIDS available

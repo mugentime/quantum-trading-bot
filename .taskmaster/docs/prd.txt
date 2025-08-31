@@ -1,131 +1,112 @@
-# Backtesting y Live Testing Comprehensive Analysis PRD
+# High Volatility Pairs Trading Strategy - Product Requirements Document
 
 ## Project Overview
-Implementar un sistema completo de backtesting para todos los pares de trading y posterior evaluación de live testing de 24 horas para validar el rendimiento real vs histórico del Quantum Trading Bot optimizado.
+Develop a comprehensive high volatility pairs trading strategy for the quantum trading bot that can identify and capitalize on extreme price movements in cryptocurrency markets while managing increased risk through sophisticated risk management protocols.
 
 ## Core Requirements
 
-### 1. Sistema de Backtesting Comprehensivo para 10 Pares
-- Generar backtesting de 30 días para cada par de trading
-- Utilizar datos históricos reales de Binance
-- Aplicar la estrategia de correlación optimizada actual
-- Calcular métricas detalladas de performance para cada par
-- Generar reportes comparativos entre pares
+### 1. Volatility Screening System
+- **Hourly Volatility Filter**: Identify pairs with >5% hourly volatility using ATR and price range analysis
+- **Daily Volatility Filter**: Screen for pairs with >15% daily volatility using rolling standard deviation
+- **Real-time Volatility Monitoring**: Continuous calculation of volatility metrics across multiple timeframes
+- **Volatility Percentile Ranking**: Rank pairs by volatility percentile for priority targeting
+- **Historical Volatility Analysis**: Compare current volatility to 30-day and 90-day historical averages
 
-### 2. Pares de Trading a Analizar
-- BTCUSDT (Bitcoin)
-- ETHUSDT (Ethereum) 
-- SOLUSDT (Solana)
-- BNBUSDT (Binance Coin)
-- XRPUSDT (Ripple)
-- ADAUSDT (Cardano)
-- AVAXUSDT (Avalanche)
-- DOGEUSDT (Dogecoin)
-- DOTUSDT (Polkadot)
-- LINKUSDT (Chainlink)
+### 2. Risk Management Framework
+- **Dynamic Stop Losses**: Implement tighter stop losses (0.8-1.5%) that adjust based on current volatility
+- **Volatility-Based Position Sizing**: Calculate position sizes inversely proportional to volatility levels
+- **Maximum Risk Per Trade**: Limit risk to 1-2% of account per trade for high volatility pairs
+- **Portfolio Heat Management**: Monitor total portfolio exposure to high volatility positions
+- **Emergency Stop Mechanisms**: Implement circuit breakers for extreme market conditions
 
-### 3. Métricas de Backtesting por Par
-- Total Return (%)
-- Sharpe Ratio
-- Maximum Drawdown
-- Win Rate (%)
-- Average Trade P&L
-- Total Trades
-- Best Trade
-- Worst Trade
-- Profit Factor
-- Volatility
+### 3. Signal Enhancement System
+- **Volatility Breakout Detection**: Identify when volatility breaks above 95th percentile thresholds
+- **Volume Spike Integration**: Correlate volume spikes with volatility for enhanced entry signals
+- **Momentum Convergence**: Use RSI, MACD, and Bollinger Bands for momentum confirmation
+- **Multi-timeframe Alignment**: Ensure signals align across 1m, 5m, 15m, and 1h timeframes
+- **Market Regime Detection**: Identify trending vs. ranging market conditions
 
-### 4. Live Testing Framework (24 horas)
-- Ejecutar estrategia en tiempo real por 24 horas
-- Comparar resultados reales vs backtesting predictions
-- Tracking en tiempo real de todas las métricas
-- Alertas automáticas vía Telegram
-- Logging detallado de cada trade
+### 4. Target Pair Configuration
+- **Primary Pairs**: BTCUSDT, ETHUSDT, SOLUSDT, BNBUSDT
+- **Secondary Pairs**: AXSUSDT, ADAUSDT, XRPUSDT, DOGEUSDT
+- **Pair-Specific Parameters**: Custom volatility thresholds and risk parameters per pair
+- **Correlation Analysis**: Monitor pair correlations to avoid overexposure
+- **Liquidity Verification**: Ensure sufficient liquidity for position entry/exit
 
-### 5. Sistema de Comparación y Evaluación
-- Comparar performance real vs backtesting por par
-- Identificar discrepancias y posibles overfitting
-- Generar score de confiabilidad para cada par
-- Crear ranking de pares por performance real
-- Documentar insights para optimización futura
+### 5. Timing Strategy Implementation
+- **Volatility Spike Detection**: Target entry during initial volatility expansion phases
+- **Low Volatility Avoidance**: Implement filters to avoid trading during low volatility periods
+- **Market Session Awareness**: Optimize timing based on Asian, European, and US market sessions
+- **News Event Integration**: Correlate volatility spikes with scheduled and breaking news
+- **Momentum Phase Identification**: Distinguish between breakout, acceleration, and exhaustion phases
 
-### 6. Reportes y Dashboard
-- Reporte detallado de backtesting por par
-- Dashboard en tiempo real para live testing
-- Reporte final de comparación backtesting vs live
-- Exportar datos para análisis posterior
-- Visualizaciones gráficas de performance
+### 6. Dynamic Leverage System
+- **Volatility-Adjusted Leverage**: Scale leverage from 3x (high volatility) to 10x (moderate volatility)
+- **Real-time Leverage Calculation**: Continuously adjust leverage based on current market conditions
+- **Risk-Adjusted Sizing**: Combine leverage with position sizing for optimal risk exposure
+- **Leverage Limits**: Implement maximum leverage caps based on account equity and drawdown
+- **Margin Safety Buffers**: Maintain sufficient margin buffers to avoid liquidation
 
-### 7. Validación de Autenticidad con Truth Enforcer
-- Usar truth enforcer para validar todos los datos
-- Asegurar que no hay simulación o datos falsos
-- Verificar conectividad real con Binance
-- Validar integridad de todas las métricas
-- Generar certificado de autenticidad
+## Technical Implementation Requirements
 
-## Technical Specifications
+### Data Processing Engine
+- **Real-time Market Data**: WebSocket connections for tick-by-tick price and volume data
+- **Historical Data Management**: Store and analyze historical volatility patterns
+- **Multi-exchange Integration**: Support for Binance, OKX, and Bybit data feeds
+- **Data Quality Assurance**: Implement data validation and cleansing protocols
+- **Performance Optimization**: Sub-millisecond calculation and decision latency
 
-### Data Requirements
-- Datos históricos de 30 días minimum
-- Timeframes: 15m, 1h, 4h para análisis multi-timeframe
-- Volume y spread data para análisis de liquidez
-- Datos de correlación entre todos los pares
+### Analytics Framework
+- **Volatility Calculators**: ATR, Historical Volatility, GKYZ, Parkinson estimators
+- **Statistical Analysis**: Rolling correlations, regime change detection, outlier identification
+- **Machine Learning Integration**: Pattern recognition for volatility prediction
+- **Backtesting Engine**: Comprehensive backtesting with realistic transaction costs
+- **Performance Metrics**: Sharpe ratio, Sortino ratio, Maximum Drawdown analysis
+
+### Execution Engine
+- **Smart Order Routing**: Optimal execution across multiple exchanges
+- **Slippage Optimization**: Minimize slippage through intelligent order placement
+- **Latency Optimization**: Sub-10ms execution latency for time-sensitive trades
+- **Order Management**: Advanced order types including iceberg and TWAP orders
+- **Position Monitoring**: Real-time P&L and risk metric tracking
+
+### Risk Management System
+- **Real-time Risk Monitoring**: Continuous assessment of portfolio risk metrics
+- **Automated Risk Controls**: Automatic position reduction during adverse conditions
+- **Stress Testing**: Regular stress testing under extreme market scenarios
+- **Compliance Monitoring**: Ensure adherence to risk limits and regulatory requirements
+- **Alert System**: Immediate notifications for risk threshold breaches
+
+## Configuration Parameters
+
+### Volatility Thresholds
+- **High Volatility Threshold**: >95th percentile of 30-day historical volatility
+- **Extreme Volatility Threshold**: >99th percentile requiring special handling
+- **Low Volatility Filter**: <25th percentile to avoid poor trading conditions
+- **Volatility Breakout Minimum**: 2x average volatility for entry consideration
+
+### Risk Parameters
+- **Maximum Position Size**: 5% of account equity per position
+- **Stop Loss Range**: 0.8% to 1.5% based on volatility level
+- **Take Profit Targets**: 2:1 to 5:1 risk-reward ratios based on volatility
+- **Daily Loss Limit**: 3% maximum daily loss across all high volatility positions
 
 ### Performance Targets
-- Backtesting execution time: <10 minutos por par
-- Live testing latency: <100ms por signal
-- Data accuracy: 99.9% minimum
-- System uptime durante live testing: 99.9%
+- **Target Sharpe Ratio**: >2.5 for high volatility strategy
+- **Maximum Drawdown**: <8% over any 30-day period
+- **Win Rate Target**: >60% with asymmetric risk-reward
+- **Daily Return Target**: 2-5% on high volatility trading days
 
-### Security Requirements
-- Todas las validaciones de seguridad activas
-- Environment separation estricta
-- Data authenticity validation continua
-- Error handling robusto
+## Success Metrics
+- **Risk-Adjusted Returns**: Consistent positive returns with controlled drawdowns
+- **Volatility Capture**: Effectively capture 60%+ of major price movements
+- **Risk Management Effectiveness**: Stay within predetermined risk parameters 95% of time
+- **System Reliability**: 99.9% uptime during active trading hours
+- **Execution Quality**: Average slippage <0.05% on volatile pair trades
 
-### Integration Requirements  
-- Integración con sistema de optimización existente
-- Compatibilidad con enhanced correlation engine
-- Telegram notifications en tiempo real
-- JSON logging estructurado
-
-## Success Criteria
-- Backtesting completado para los 10 pares en <2 horas
-- Live testing ejecutado exitosamente por 24 horas completas
-- Comparación detallada generada con insights accionables
-- Truth enforcer validation 100% passed
-- Al menos 3 trades ejecutados durante live testing
-- Performance real dentro del 15% del backtesting predicted
-
-## Deliverables
-1. Backtesting engine optimizado para múltiples pares
-2. Live testing framework con monitoring en tiempo real
-3. Sistema de comparación automatizado
-4. Reportes comprehensivos en múltiples formatos
-5. Dashboard de monitoreo
-6. Certificación de autenticidad completa
-7. Documentación técnica detallada
-8. Recomendaciones para trading en vivo
-
-## Implementation Timeline
-### Phase 1: Backtesting Engine (2-3 horas)
-- Implementar backtesting para los 10 pares
-- Generar métricas y reportes
-- Validar datos históricos
-
-### Phase 2: Live Testing Setup (1 hour)
-- Configurar framework de 24h testing
-- Implementar monitoring en tiempo real
-- Setup Telegram notifications
-
-### Phase 3: Execution (24 hours)
-- Ejecutar live testing completo
-- Monitoreo continuo
-- Logging detallado de todos los events
-
-### Phase 4: Analysis & Validation (2 hours)
-- Comparar resultados vs backtesting
-- Ejecutar truth enforcer validation
-- Generar reportes finales
-- Crear recomendaciones
+## Technical Architecture
+- **Microservices Design**: Modular components for scalability and maintenance
+- **High Availability**: Redundant systems with automatic failover
+- **Monitoring and Logging**: Comprehensive system monitoring and trade logging
+- **Configuration Management**: Dynamic configuration updates without system restart
+- **Testing Framework**: Automated testing for all critical system components
