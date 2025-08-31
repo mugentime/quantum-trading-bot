@@ -35,6 +35,7 @@ try:
     from core.data_collector import DataCollector
     from core.correlation_engine import CorrelationEngine
     from core.signal_generator import SignalGenerator
+    from core.volatility_signal_generator import VolatilitySignalGenerator
     from core.ultra_high_frequency_trader import ultra_high_frequency_trader
     from core.executor import Executor
     from core.risk_manager import RiskManager
@@ -44,7 +45,7 @@ try:
     from core.data_authenticity_validator import authenticity_validator
     from api.health import run_health_server_thread
     
-    startup_logger.info("Core modules imported successfully")
+    startup_logger.info("Core modules imported successfully - HIGH VOLATILITY SYSTEM ACTIVE")
 except ImportError as e:
     startup_logger.critical(f"Error importing modules: {e}")
     startup_logger.critical("Please install dependencies with: pip install -r requirements.txt")
@@ -88,10 +89,11 @@ class TradingBot:
                        stop_loss=config.STOP_LOSS_PERCENT,
                        symbols=config.SYMBOLS)
         
-        # Initialize components
+        # Initialize components - HIGH VOLATILITY SYSTEM
         self.data_collector = DataCollector(config.SYMBOLS)
         self.correlation_engine = CorrelationEngine()
         self.signal_generator = SignalGenerator()
+        self.volatility_signal_generator = VolatilitySignalGenerator()
         self.risk_manager = RiskManager()
         self.executor = Executor()
         self.performance_tracker = PerformanceTracker()
@@ -116,8 +118,29 @@ class TradingBot:
                 # Calculate correlations
                 correlations = self.correlation_engine.calculate(market_data)
                 
-                # Generate signals
-                signals = self.signal_generator.generate(correlations, market_data)
+                # Generate traditional signals
+                traditional_signals = self.signal_generator.generate(correlations, market_data)
+                
+                # Generate high-volatility signals
+                volatility_signals = await self.volatility_signal_generator.generate_volatility_signals(
+                    market_data, account_balance=15000  # Default balance
+                )
+                
+                # Combine all signals
+                signals = traditional_signals + [
+                    {
+                        'symbol': vs.symbol,
+                        'side': vs.direction.value,
+                        'confidence': vs.confidence,
+                        'volatility_tier': vs.volatility_tier.value,
+                        'entry_price': vs.entry_price,
+                        'stop_loss': vs.stop_loss,
+                        'take_profit': vs.take_profit_1,
+                        'position_size_pct': vs.position_size_pct,
+                        'trading_mode': 'high_volatility',
+                        'correlation_basis': vs.correlation_basis
+                    } for vs in volatility_signals
+                ]
                 
                 # Generate AXSUSDT ultra-high frequency signals
                 if 'AXSUSDT' in market_data:
