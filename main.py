@@ -251,14 +251,14 @@ if __name__ == "__main__":
     deployment_id = os.getenv('RAILWAY_DEPLOYMENT_ID', 'local')
     
     print("=" * 60)
-    print("🤖 QUANTUM TRADING BOT v1.0 - RAILWAY DEPLOYMENT")
+    print("[ROBOT] QUANTUM TRADING BOT v1.0 - RAILWAY DEPLOYMENT")
     print("=" * 60)
-    print(f"🌍 Environment: {environment}")
-    print(f"📈 Symbols: {', '.join(config.SYMBOLS)}")
-    print(f"⚡ Leverage: {config.DEFAULT_LEVERAGE}x")
-    print(f"💰 Risk per Trade: {config.RISK_PER_TRADE*100:.1f}%")
-    print(f"🆔 Deployment: {deployment_id}")
-    print(f"🕒 Started: {datetime.now().isoformat()}")
+    print(f"[ENV] Environment: {environment}")
+    print(f"[SYMBOLS] Symbols: {', '.join(config.SYMBOLS)}")
+    print(f"[LEVERAGE] Leverage: {config.DEFAULT_LEVERAGE}x")
+    print(f"[RISK] Risk per Trade: {config.RISK_PER_TRADE*100:.1f}%")
+    print(f"[DEPLOY] Deployment: {deployment_id}")
+    print(f"[TIME] Started: {datetime.now().isoformat()}")
     print("=" * 60)
     
     try:
