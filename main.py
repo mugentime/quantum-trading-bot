@@ -14,34 +14,60 @@ import os
 # Add current directory to Python path to fix import issues
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
-# Simplified imports for startup
-print("Starting Quantum Trading Bot...")
-print("Loading configuration...")
+# Initialize production logging first
+try:
+    from utils.production_logger import setup_production_logging, get_trading_logger
+    setup_production_logging()
+    startup_logger = get_trading_logger('main')
+    startup_logger.info("Starting Quantum Trading Bot", 
+                       environment=os.getenv('ENVIRONMENT', 'development'),
+                       version="1.0.0")
+except ImportError:
+    # Fallback to basic logging if production logger not available
+    logging.basicConfig(level=logging.INFO)
+    startup_logger = logging.getLogger('main')
+    startup_logger.info("Starting Quantum Trading Bot (fallback logging)")
+
+startup_logger.info("Loading configuration...")
 
 try:
     from core.config.settings import config
     from core.data_collector import DataCollector
     from core.correlation_engine import CorrelationEngine
     from core.signal_generator import SignalGenerator
+    from core.ultra_high_frequency_trader import ultra_high_frequency_trader
     from core.executor import Executor
     from core.risk_manager import RiskManager
     from analytics.performance import PerformanceTracker
     from analytics.failure_analyzer import FailureAnalyzer
-    from utils.logger import setup_logger
     from core.environment_manager import environment_manager, Environment
     from core.data_authenticity_validator import authenticity_validator
     from api.health import run_health_server_thread
+    
+    startup_logger.info("Core modules imported successfully")
 except ImportError as e:
-    print(f"[ERROR] Error importing modules: {e}")
-    print("Please install dependencies with: pip install -r requirements.txt")
+    startup_logger.critical(f"Error importing modules: {e}")
+    startup_logger.critical("Please install dependencies with: pip install -r requirements.txt")
     sys.exit(1)
 
-# Setup logging
-logger = setup_logger('main')
+# Use production logger if available, fallback otherwise
+try:
+    logger = get_trading_logger('main')
+except NameError:
+    logger = logging.getLogger('main')
 
 class TradingBot:
     def __init__(self):
         logger.info("Initializing Quantum Trading Bot...")
+        
+        # Set trading context for structured logging
+        if hasattr(logger, 'set_trading_context'):
+            logger.set_trading_context({
+                "bot_version": "1.0.0",
+                "target_return": "14%_daily",
+                "primary_symbol": "ETHUSDT",
+                "strategy": "ultra_high_frequency_scalping"
+            })
         
         # SECURITY: Initialize environment manager first
         env_type = Environment.TESTNET if config.BINANCE_TESTNET else Environment.PRODUCTION
@@ -53,6 +79,14 @@ class TradingBot:
         
         logger.info(f"Environment initialized: {env_type.value}")
         logger.info(f"Data authenticity validation: {'ENABLED' if authenticity_validator.validation_enabled else 'DISABLED'}")
+        
+        # Log critical production settings
+        if env_type == Environment.PRODUCTION:
+            logger.info("Production settings active",
+                       leverage=config.DEFAULT_LEVERAGE,
+                       risk_per_trade=config.RISK_PER_TRADE,
+                       stop_loss=config.STOP_LOSS_PERCENT,
+                       symbols=config.SYMBOLS)
         
         # Initialize components
         self.data_collector = DataCollector(config.SYMBOLS)
@@ -85,6 +119,20 @@ class TradingBot:
                 # Generate signals
                 signals = self.signal_generator.generate(correlations, market_data)
                 
+                # Generate AXSUSDT ultra-high frequency signals
+                if 'AXSUSDT' in market_data:
+                    uhf_analysis = await ultra_high_frequency_trader.analyze_ultra_high_frequency_opportunity(
+                        market_data, correlations
+                    )
+                    if uhf_analysis['signal']:
+                        uhf_signal = uhf_analysis['signal']
+                        uhf_signal['uhf_confidence'] = uhf_analysis['confidence']
+                        uhf_signal['volatility_score'] = uhf_analysis['volatility_score']
+                        signals.append(uhf_signal)
+                        logger.info(f"UHF Signal added: AXSUSDT {uhf_signal['side']} "
+                                  f"(confidence={uhf_analysis['confidence']:.2f})")
+                        ultra_high_frequency_trader.update_signal_time()
+                
                 # Risk checks
                 approved_signals = self.risk_manager.filter_signals(signals)
                 
@@ -94,6 +142,11 @@ class TradingBot:
                     
                     # Track performance
                     self.performance_tracker.record_trade(execution_result)
+                    
+                    # Update ultra-high frequency trader metrics if AXSUSDT
+                    if signal.get('symbol') == 'AXSUSDT' and hasattr(signal, 'trading_mode'):
+                        if signal.get('trading_mode') == 'ultra_high_frequency':
+                            ultra_high_frequency_trader.update_trade_result(execution_result)
                     
                     # Analyze if failed
                     if execution_result.status not in ['FILLED', 'SUCCESS']:
@@ -142,40 +195,90 @@ class TradingBot:
             logger.error(f"Failed to send security alert: {e}")
 
 def signal_handler(signum, frame):
-    """Handle shutdown signals"""
-    logger.info(f"Signal received {signum}")
+    """Handle shutdown signals gracefully"""
+    logger.info(f"Shutdown signal received: {signum}")
+    
+    # Attempt graceful shutdown
+    if 'bot' in globals() and hasattr(bot, 'stop'):
+        try:
+            asyncio.create_task(bot.stop())
+            logger.info("Graceful shutdown initiated")
+        except Exception as e:
+            logger.error(f"Error during graceful shutdown: {e}")
+    
+    logger.info("Process terminating")
     sys.exit(0)
 
 async def main():
     global bot
     
-    # Start health check server for Railway
-    health_port = int(os.getenv("HEALTH_CHECK_PORT", 8080))
-    logger.info(f"Starting health check server on port {health_port}")
-    run_health_server_thread(health_port)
-    
-    # Create bot instance
-    bot = TradingBot()
-    
-    # Setup signal handlers
-    signal.signal(signal.SIGINT, signal_handler)
-    signal.signal(signal.SIGTERM, signal_handler)
-    
-    # Start bot
-    await bot.start()
+    try:
+        # Start health check server for Railway
+        health_port = int(os.getenv("HEALTH_CHECK_PORT", 8080))
+        logger.info(f"Starting health check server on port {health_port}")
+        run_health_server_thread(health_port)
+        
+        # Create bot instance
+        logger.info("Creating bot instance...")
+        bot = TradingBot()
+        
+        # Setup signal handlers for graceful shutdown
+        signal.signal(signal.SIGINT, signal_handler)
+        signal.signal(signal.SIGTERM, signal_handler)
+        
+        # Log final startup information
+        startup_info = {
+            "mode": "PRODUCTION" if not config.BINANCE_TESTNET else "TESTNET",
+            "symbols": config.SYMBOLS,
+            "leverage": config.DEFAULT_LEVERAGE,
+            "risk_per_trade": config.RISK_PER_TRADE,
+            "health_port": health_port,
+            "deployment_id": os.getenv('RAILWAY_DEPLOYMENT_ID', 'local')
+        }
+        
+        logger.info("Bot initialization complete", **startup_info)
+        
+        # Start bot with error handling
+        await bot.start()
+        
+    except Exception as e:
+        logger.critical(f"Failed to start bot: {e}", exc_info=True)
+        raise
 
 if __name__ == "__main__":
-    print("=" * 50)
-    print("QUANTUM TRADING BOT v1.0")
-    print("=" * 50)
-    print(f"Mode: {'TESTNET' if config.BINANCE_TESTNET else 'PRODUCTION'}")
-    print(f"Symbols: {', '.join(config.SYMBOLS)}")
-    print("=" * 50)
+    # Production-ready startup banner
+    environment = "PRODUCTION" if not config.BINANCE_TESTNET else "TESTNET"
+    deployment_id = os.getenv('RAILWAY_DEPLOYMENT_ID', 'local')
+    
+    print("=" * 60)
+    print("🤖 QUANTUM TRADING BOT v1.0 - RAILWAY DEPLOYMENT")
+    print("=" * 60)
+    print(f"🌍 Environment: {environment}")
+    print(f"📈 Symbols: {', '.join(config.SYMBOLS)}")
+    print(f"⚡ Leverage: {config.DEFAULT_LEVERAGE}x")
+    print(f"💰 Risk per Trade: {config.RISK_PER_TRADE*100:.1f}%")
+    print(f"🆔 Deployment: {deployment_id}")
+    print(f"🕒 Started: {datetime.now().isoformat()}")
+    print("=" * 60)
     
     try:
+        # Log startup to structured logging
+        logger.info("Bot startup initiated",
+                   environment=environment,
+                   deployment_id=deployment_id,
+                   startup_time=datetime.now().isoformat())
+                   
         asyncio.run(main())
+        
     except KeyboardInterrupt:
+        logger.info("Bot stopped by user (KeyboardInterrupt)")
         print("\n[STOPPED] Bot stopped by user")
+        
     except Exception as e:
+        logger.critical(f"Fatal error during execution: {e}", exc_info=True)
         print(f"[ERROR] Fatal error: {e}")
         sys.exit(1)
+        
+    finally:
+        logger.info("Bot process terminated")
+        print("Bot process terminated")

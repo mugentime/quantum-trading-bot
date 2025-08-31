@@ -1,9 +1,9 @@
 # Core Dependencies
-ccxt==4.1.22
-pandas==2.1.4
-numpy==1.24.3
-scipy==1.11.4
-scikit-learn==1.3.2
+ccxt==4.4.98
+pandas==2.2.3
+numpy==2.0.1
+scipy==1.13.1
+scikit-learn==1.5.1
 
 # API & WebSocket
 python-binance==1.0.19
@@ -14,10 +14,8 @@ aiohttp==3.9.1
 sqlalchemy==2.0.23
 redis==5.0.1
 
-# UI (Optional - uncomment for local GUI)
-# PyQt6==6.6.0
-# pyqtgraph==0.13.3
-plotly==5.18.0
+# Visualization (Production-safe)
+plotly==5.22.0
 
 # Technical Analysis
 pandas-ta==0.3.14b0
@@ -44,17 +42,18 @@ cryptography==41.0.7
 asyncio-throttle==1.0.2
 aiofiles==23.2.1
 websockets==12.0
-uvloop==0.19.0  # For Linux/Mac performance boost
+uvloop==0.20.0; sys_platform != "win32"  # For Linux/Mac performance boost
 
-# Advanced Analytics
-ta-lib==0.4.28  # Technical analysis library
-numba==0.58.1  # JIT compilation for performance
-cython==3.0.5   # Performance optimization
+# Advanced Analytics - Railway Compatible
+# Note: ta-lib requires system dependencies, using pandas-ta instead
+numba==0.60.0  # JIT compilation for performance
 
 # Testing
 pytest==7.4.3
 pytest-asyncio==0.21.1
 
-# Performance Monitoring
+# Production Monitoring
 memory-profiler==0.61.0
-line-profiler==4.1.1
+line-profiler==4.1.3
+prometheus-client==0.20.0
+grafana-api==1.0.3

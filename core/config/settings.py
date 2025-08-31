@@ -13,9 +13,9 @@ class Config:
     BINANCE_SECRET_KEY = os.getenv('BINANCE_SECRET_KEY')
     BINANCE_TESTNET = os.getenv('BINANCE_TESTNET', 'false').lower() == 'true'
     
-    # Trading Parameters - HIGH-FREQUENCY SCALPING OPTIMIZED
-    SYMBOLS = ['ETHUSDT']  # Primary focus for high-frequency scalping
-    TIMEFRAMES = ['1m', '3m', '5m']  # Optimized for 3-minute scalping
+    # Trading Parameters - ULTRA-HIGH-FREQUENCY SCALPING OPTIMIZED
+    SYMBOLS = ['ETHUSDT', 'AXSUSDT']  # ETHUSDT + AXSUSDT for 620% monthly target
+    TIMEFRAMES = ['1m', '3m', '5m']  # Optimized for ultra-high frequency scalping
     CORRELATION_PERIOD = 30  # Shorter period for faster signal detection
     DEVIATION_THRESHOLD = 0.08  # Lower threshold for more frequent signals
     

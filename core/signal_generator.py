@@ -59,8 +59,8 @@ class SignalGenerator:
         self.min_correlation_change = 0.08  # Much lower threshold for frequent signals
         self.regime_change_threshold = 0.15  # More sensitive for scalping
         self.false_positive_filters = True
-        # High-frequency scalping focus
-        self.primary_symbols = ['ETHUSDT']  # Primary scalping symbol
+        # Ultra-high-frequency scalping focus
+        self.primary_symbols = ['ETHUSDT', 'AXSUSDT']  # Primary + AXSUSDT for 620% target
         self.signal_generation_frequency = 30  # Generate signals every 30 seconds
         self.last_signal_time = None
         self.min_signal_interval = 15  # Minimum 15 seconds between signals
@@ -129,9 +129,11 @@ class SignalGenerator:
             if len(symbols) < 2 or confidence < self.confidence_threshold:
                 return None
             
-            # PRIORITIZE ETHUSDT FOR HIGH-FREQUENCY SCALPING
+            # PRIORITIZE ETHUSDT AND AXSUSDT FOR ULTRA-HIGH-FREQUENCY SCALPING
             if 'ETHUSDT' in symbols:
-                symbol = 'ETHUSDT'  # Always prefer ETHUSDT for scalping
+                symbol = 'ETHUSDT'  # Always prefer ETHUSDT for proven scalping
+            elif 'AXSUSDT' in symbols:
+                symbol = 'AXSUSDT'  # Second priority for 620% monthly target
             else:
                 symbol = symbols[0]
             
@@ -158,9 +160,11 @@ class SignalGenerator:
             
             # Calculate position sizing - SCALPING OPTIMIZED
             position_size = self._calculate_position_size(confidence, symbol, market_data)
-            # Scalping-specific position sizing for ETHUSDT
+            # Scalping-specific position sizing for ETHUSDT and AXSUSDT
             if symbol == 'ETHUSDT':
-                position_size = min(position_size * 1.1, 0.20)  # Cap at 20% for scalping
+                position_size = min(position_size * 1.1, 0.20)  # Cap at 20% for proven scalping
+            elif symbol == 'AXSUSDT':
+                position_size = min(position_size * 0.8, 0.15)  # Conservative for AXSUSDT volatility
             
             # Set stop loss and take profit based on statistical analysis
             stop_loss, take_profit = self._calculate_risk_levels(
@@ -310,9 +314,11 @@ class SignalGenerator:
         """Calculate position size optimized for high-frequency scalping"""
         base_position_size = config.RISK_PER_TRADE  # 0.15 for scalping strategy
         
-        # ETHUSDT gets optimized sizing for scalping
+        # ETHUSDT and AXSUSDT get optimized sizing for ultra-high frequency scalping
         if symbol == 'ETHUSDT':
-            confidence_multiplier = min(confidence * 1.2, 1.4)  # Moderate multiplier for scalping
+            confidence_multiplier = min(confidence * 1.2, 1.4)  # Moderate multiplier for proven scalping
+        elif symbol == 'AXSUSDT':
+            confidence_multiplier = min(confidence * 1.0, 1.3)  # Slightly higher for AXSUSDT volatility potential
         else:
             confidence_multiplier = min(confidence * 1.0, 1.2)
         
@@ -321,17 +327,25 @@ class SignalGenerator:
         liquidity_factor = min(volume_data / 1000000, 1.5)  # More conservative cap
         
         position_size = base_position_size * confidence_multiplier * liquidity_factor
-        # Scalping position limits
-        max_position = 0.20 if symbol == 'ETHUSDT' else 0.10
+        # Ultra-high frequency scalping position limits
+        if symbol == 'ETHUSDT':
+            max_position = 0.20  # 20% max for proven ETHUSDT scalping
+        elif symbol == 'AXSUSDT':
+            max_position = 0.15  # 15% max for AXSUSDT high volatility
+        else:
+            max_position = 0.10
         return min(position_size, max_position)
     
     def _calculate_risk_levels(self, entry_price: float, action: SignalAction, 
                               confidence: float, symbol: str, market_data: Dict) -> Tuple[float, float]:
         """Calculate stop loss and take profit levels optimized for high-frequency scalping"""
-        # SCALPING-OPTIMIZED RISK LEVELS
+        # ULTRA-HIGH-FREQUENCY SCALPING-OPTIMIZED RISK LEVELS
         if symbol == 'ETHUSDT':
-            base_stop_loss_pct = 0.012  # 1.2% stop loss for scalping
+            base_stop_loss_pct = 0.012  # 1.2% stop loss for proven ETHUSDT scalping
             base_take_profit_ratio = 1.5   # 1.5:1 ratio (1.8% take profit)
+        elif symbol == 'AXSUSDT':
+            base_stop_loss_pct = 0.015  # 1.5% stop loss for AXSUSDT high volatility
+            base_take_profit_ratio = 2.67  # 2.67:1 ratio (4.0% take profit for 620% target)
         else:
             base_stop_loss_pct = config.STOP_LOSS_PERCENT
             base_take_profit_ratio = config.TAKE_PROFIT_RATIO

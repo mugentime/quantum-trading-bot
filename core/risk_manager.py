@@ -71,10 +71,15 @@ class RiskManager:
                 validation_result['adjustments']['reduce_leverage'] = max(8, int(proposed_leverage * 0.9))  # Adjusted for 8.5x base
                 validation_result['risk_score'] += 0.2
             
-            # Check leverage safety - FOCUSED ON 8.5X ETHUSDT
+            # Check leverage safety - FOCUSED ON 8.5X ETHUSDT + AXSUSDT
             safe_leverage = leverage_manager.calculate_safe_leverage(account_balance, symbol)
-            # Allow slightly higher leverage for ETHUSDT given its performance
-            leverage_multiplier = 1.3 if symbol == 'ETHUSDT' else 1.1
+            # Allow leverage optimization for specific pairs
+            if symbol == 'ETHUSDT':
+                leverage_multiplier = 1.3  # Higher for proven ETHUSDT performance
+            elif symbol == 'AXSUSDT':
+                leverage_multiplier = 1.2  # Moderate for AXSUSDT high volatility potential
+            else:
+                leverage_multiplier = 1.1
             if proposed_leverage > safe_leverage * leverage_multiplier:
                 validation_result['warnings'].append(f'Leverage exceeds safe limit: {safe_leverage}x')
                 validation_result['adjustments']['max_leverage'] = int(safe_leverage * leverage_multiplier)
@@ -117,10 +122,11 @@ class RiskManager:
     async def _check_correlation_risk(self, symbol: str, position_size: float) -> Dict:
         """Check if new position would create excessive correlation exposure"""
         try:
-            # Group symbols by correlation
+            # Group symbols by correlation - INCLUDING AXSUSDT
             correlation_groups = {
                 'crypto_majors': ['BTCUSDT', 'ETHUSDT'],
-                'altcoins': ['SOLUSDT', 'BNBUSDT', 'XRPUSDT']
+                'high_volatility': ['AXSUSDT', 'SOLUSDT'],  # AXSUSDT in high volatility group
+                'altcoins': ['BNBUSDT', 'XRPUSDT']
             }
             
             current_group = None

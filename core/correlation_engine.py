@@ -158,6 +158,10 @@ class CorrelationEngine:
                         # Calculate confidence based on correlation strength and significance
                         confidence = min(abs(correlation) * (1 - p_value), 0.95)
                         
+                        # Boost confidence for AXSUSDT pairs (620% monthly target potential)
+                        if 'AXSUSDT' in [symbol1, symbol2]:
+                            confidence = min(confidence * 1.15, 0.95)  # 15% confidence boost
+                        
                         opportunities.append({
                             'type': 'high_correlation' if correlation > 0 else 'negative_correlation',
                             'symbols': [symbol1, symbol2],

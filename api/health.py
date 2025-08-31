@@ -237,7 +237,7 @@ def prometheus_metrics():
         # Uptime metric
         metrics.append(f'quantum_trading_uptime_seconds {uptime}')
         
-        return '\\n'.join(metrics), 200, {'Content-Type': 'text/plain'}
+        return '\n'.join(metrics), 200, {'Content-Type': 'text/plain'}
         
     except Exception as e:
         logger.error(f"Metrics endpoint failed: {e}")

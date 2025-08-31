@@ -54,7 +54,7 @@ class ScalpingParameters:
     HIGH_ACTIVITY_HOURS: List[tuple] = [
         (time(8, 0), time(12, 0)),   # European session
         (time(13, 0), time(17, 0)),  # US overlap
-        (time(20, 0), time(24, 0))   # Asian session start
+        (time(20, 0), time(23, 59))   # Asian session start
     ]
     
     # Volume and Liquidity
