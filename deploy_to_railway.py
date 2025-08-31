@@ -24,7 +24,7 @@ class RailwayDeployer:
         
     def validate_environment(self):
         """Validate local environment and files before deployment"""
-        print("🔍 Validating deployment environment...")
+        print("[VALIDATION] Validating deployment environment...")
         
         required_files = [
             'main.py',
@@ -41,7 +41,7 @@ class RailwayDeployer:
                 missing_files.append(file)
         
         if missing_files:
-            print(f"❌ Missing required files: {', '.join(missing_files)}")
+            print(f"[ERROR] Missing required files: {', '.join(missing_files)}")
             return False
             
         # Validate Python syntax of main files
@@ -49,7 +49,7 @@ class RailwayDeployer:
             if not self._validate_python_syntax(py_file):
                 return False
                 
-        print("✅ Environment validation passed")
+        print("[SUCCESS] Environment validation passed")
         return True
         
     def _validate_python_syntax(self, filename):
@@ -59,42 +59,42 @@ class RailwayDeployer:
                 compile(f.read(), filename, 'exec')
             return True
         except SyntaxError as e:
-            print(f"❌ Syntax error in {filename}: {e}")
+            print(f"[ERROR] Syntax error in {filename}: {e}")
             return False
         except Exception as e:
-            print(f"❌ Error validating {filename}: {e}")
+            print(f"[ERROR] Error validating {filename}: {e}")
             return False
             
     def check_railway_cli(self):
         """Check if Railway CLI is installed and authenticated"""
-        print("🚂 Checking Railway CLI...")
+        print("[RAILWAY] Checking Railway CLI...")
         
         try:
             result = subprocess.run(['railway', '--version'], 
                                   capture_output=True, text=True, check=True)
-            print(f"✅ Railway CLI found: {result.stdout.strip()}")
+            print(f"[SUCCESS] Railway CLI found: {result.stdout.strip()}")
         except (subprocess.CalledProcessError, FileNotFoundError):
-            print("❌ Railway CLI not found. Installing...")
+            print("[ERROR] Railway CLI not found. Installing...")
             return self._install_railway_cli()
             
         # Check authentication
         try:
             result = subprocess.run(['railway', 'whoami'], 
                                   capture_output=True, text=True, check=True)
-            print(f"✅ Authenticated as: {result.stdout.strip()}")
+            print(f"[SUCCESS] Authenticated as: {result.stdout.strip()}")
             return True
         except subprocess.CalledProcessError:
-            print("❌ Not authenticated with Railway")
+            print("[ERROR] Not authenticated with Railway")
             return self._authenticate_railway()
             
     def _install_railway_cli(self):
         """Install Railway CLI via npm"""
         try:
             subprocess.run(['npm', 'install', '-g', '@railway/cli'], check=True)
-            print("✅ Railway CLI installed successfully")
+            print("[SUCCESS] Railway CLI installed successfully")
             return self._authenticate_railway()
         except subprocess.CalledProcessError as e:
-            print(f"❌ Failed to install Railway CLI: {e}")
+            print(f"[ERROR] Failed to install Railway CLI: {e}")
             return False
             
     def _authenticate_railway(self):
@@ -273,28 +273,28 @@ class RailwayDeployer:
     def generate_deployment_summary(self):
         """Generate deployment summary and next steps"""
         print("\\n" + "="*60)
-        print("🎉 QUANTUM TRADING BOT DEPLOYMENT COMPLETE")
+        print("[SUCCESS] QUANTUM TRADING BOT DEPLOYMENT COMPLETE")
         print("="*60)
         
         if 'url' in self.deployment_config:
-            print(f"🌐 Application URL: {self.deployment_config['url']}")
-            print(f"🔍 Health Check: {self.deployment_config['url']}/health")
-            print(f"📊 Metrics: {self.deployment_config['url']}/metrics")
+            print(f"Application URL: {self.deployment_config['url']}")
+            print(f"Health Check: {self.deployment_config['url']}/health")
+            print(f"Metrics: {self.deployment_config['url']}/metrics")
         
-        print("\\n📋 NEXT STEPS:")
+        print("\\nNEXT STEPS:")
         print("1. Set your BINANCE_API_KEY and BINANCE_SECRET_KEY in Railway dashboard")
         print("2. Monitor logs: railway logs --follow")
         print("3. Check health endpoint to verify bot is running")
         print("4. Set up Telegram notifications (optional but recommended)")
         print("5. Monitor trading performance via metrics endpoint")
         
-        print("\\n⚠️ IMPORTANT REMINDERS:")
+        print("\\n[WARNING] IMPORTANT REMINDERS:")
         print("- Verify BINANCE_TESTNET=false for real trading")
         print("- Ensure sufficient USDT balance in your Binance account")
         print("- Bot will trade with 8.5x leverage - understand the risks")
         print("- Monitor the bot closely, especially in the first few hours")
         
-        print("\\n🚨 EMERGENCY COMMANDS:")
+        print("\\n[EMERGENCY] EMERGENCY COMMANDS:")
         print("- Stop bot: railway service delete")
         print("- View logs: railway logs --follow")
         print("- Update env vars: railway variables")
@@ -303,8 +303,8 @@ class RailwayDeployer:
         
     def run_deployment(self):
         """Run the complete deployment process"""
-        print("🚀 Starting Quantum Trading Bot deployment to Railway...")
-        print(f"⏰ Deployment started at: {datetime.now()}")
+        print("Starting Quantum Trading Bot deployment to Railway...")
+        print(f"Deployment started at: {datetime.now()}")
         
         steps = [
             ("Validate Environment", self.validate_environment),
@@ -317,12 +317,12 @@ class RailwayDeployer:
         ]
         
         for step_name, step_func in steps:
-            print(f"\\n📋 Step: {step_name}")
+            print(f"\\n[STEP] {step_name}")
             if not step_func():
-                print(f"❌ Deployment failed at step: {step_name}")
+                print(f"[ERROR] Deployment failed at step: {step_name}")
                 return False
                 
-        print("\\n🎉 Deployment completed successfully!")
+        print("\\n[SUCCESS] Deployment completed successfully!")
         return True
 
 def main():
@@ -334,10 +334,10 @@ def main():
         sys.exit(0 if success else 1)
         
     except KeyboardInterrupt:
-        print("\\n❌ Deployment cancelled by user")
+        print("\\n[CANCELLED] Deployment cancelled by user")
         sys.exit(1)
     except Exception as e:
-        print(f"❌ Unexpected error during deployment: {e}")
+        print(f"[ERROR] Unexpected error during deployment: {e}")
         sys.exit(1)
 
 if __name__ == "__main__":

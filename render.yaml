@@ -1,0 +1,54 @@
+services:
+  - type: web
+    name: quantum-trading-bot-emergency
+    env: python
+    buildCommand: pip install --no-cache-dir -r requirements.txt
+    startCommand: python -u main.py
+    plan: starter
+    region: oregon
+    branch: main
+    repo: https://github.com/YOUR_USERNAME/quantum_trading_bot
+    envVars:
+      - key: ENVIRONMENT
+        value: production
+      - key: BINANCE_TESTNET
+        value: "false"
+      - key: RISK_PER_TRADE
+        value: "0.15"
+      - key: DEFAULT_LEVERAGE
+        value: "8.5"
+      - key: MAX_LEVERAGE
+        value: "10"
+      - key: MIN_LEVERAGE
+        value: "8"
+      - key: MAX_CONCURRENT_POSITIONS
+        value: "1"
+      - key: STOP_LOSS_PERCENT
+        value: "0.012"
+      - key: TAKE_PROFIT_RATIO
+        value: "1.5"
+      - key: PYTHONUNBUFFERED
+        value: "1"
+      - key: PORT
+        value: "8080"
+      - key: HEALTH_CHECK_PORT
+        value: "8080"
+      - key: TZ
+        value: UTC
+      - key: SIGNAL_GENERATION_INTERVAL
+        value: "30"
+      - key: MIN_SIGNAL_INTERVAL
+        value: "15"
+      - key: ORDER_TIMEOUT
+        value: "5"
+      - key: TARGET_TRADES_PER_DAY
+        value: "22"
+    healthCheckPath: /health
+    scaling:
+      minInstances: 1
+      maxInstances: 1
+    autoDeploy: true
+    disk:
+      name: quantum-trading-data
+      mountPath: /app/data
+      sizeGB: 1
