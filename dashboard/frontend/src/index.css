@@ -1,0 +1,344 @@
+/* Reset and base styles */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Roboto Mono', 'Roboto', 'Helvetica', 'Arial', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: #0a0a0a;
+  color: #ffffff;
+  overflow-x: hidden;
+}
+
+#root {
+  height: 100vh;
+  width: 100vw;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.5);
+}
+
+/* React Grid Layout custom styles */
+.react-grid-layout {
+  position: relative;
+}
+
+.react-grid-item {
+  transition: all 200ms ease;
+  transition-property: left, top, width, height;
+}
+
+.react-grid-item img {
+  pointer-events: none;
+  user-select: none;
+}
+
+.react-grid-item.cssTransforms {
+  transition-property: transform, width, height;
+}
+
+.react-grid-item.resizing {
+  opacity: 0.6;
+  z-index: 1;
+}
+
+.react-grid-item.react-draggable-dragging {
+  transition: none;
+  z-index: 3;
+}
+
+.react-grid-item.dropping {
+  visibility: hidden;
+}
+
+.react-grid-item.react-grid-placeholder {
+  background: red;
+  opacity: 0.2;
+  transition-duration: 100ms;
+  z-index: 2;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  -o-user-select: none;
+  user-select: none;
+}
+
+.react-grid-item.react-grid-placeholder.placeholder-active {
+  opacity: 0.3;
+}
+
+.react-grid-item > .react-resizable-handle {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  bottom: 0;
+  right: 0;
+  cursor: se-resize;
+}
+
+.react-grid-item > .react-resizable-handle::after {
+  content: "";
+  position: absolute;
+  right: 3px;
+  bottom: 3px;
+  width: 5px;
+  height: 5px;
+  border-right: 2px solid rgba(0, 0, 0, 0.4);
+  border-bottom: 2px solid rgba(0, 0, 0, 0.4);
+}
+
+/* Custom trading styles */
+.profit {
+  color: #00e676 !important;
+}
+
+.loss {
+  color: #ff1744 !important;
+}
+
+.neutral {
+  color: #ffb300 !important;
+}
+
+/* Animation keyframes */
+@keyframes pulse {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes bounce {
+  0%, 20%, 53%, 80%, 100% {
+    animation-timing-function: cubic-bezier(0.215, 0.610, 0.355, 1.000);
+    transform: translate3d(0,0,0);
+  }
+  40%, 43% {
+    animation-timing-function: cubic-bezier(0.755, 0.050, 0.855, 0.060);
+    transform: translate3d(0, -30px, 0);
+  }
+  70% {
+    animation-timing-function: cubic-bezier(0.755, 0.050, 0.855, 0.060);
+    transform: translate3d(0, -15px, 0);
+  }
+  90% {
+    transform: translate3d(0,-4px,0);
+  }
+}
+
+/* Utility classes */
+.animate-pulse {
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+.animate-slideIn {
+  animation: slideIn 0.3s ease-out;
+}
+
+.animate-fadeIn {
+  animation: fadeIn 0.5s ease-in;
+}
+
+.animate-bounce {
+  animation: bounce 1s;
+}
+
+/* Chart container styles */
+.recharts-default-tooltip {
+  background-color: rgba(26, 26, 26, 0.95) !important;
+  border: 1px solid rgba(255, 255, 255, 0.12) !important;
+  border-radius: 8px !important;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3) !important;
+  backdrop-filter: blur(10px) !important;
+}
+
+.recharts-tooltip-item {
+  color: #ffffff !important;
+}
+
+.recharts-tooltip-label {
+  color: #ffffff !important;
+  font-weight: bold !important;
+}
+
+/* Material-UI component overrides */
+.MuiCard-root {
+  background-color: rgba(26, 26, 26, 0.8) !important;
+  backdrop-filter: blur(20px) !important;
+  border: 1px solid rgba(255, 255, 255, 0.12) !important;
+}
+
+.MuiPaper-root {
+  background-color: rgba(26, 26, 26, 0.9) !important;
+  backdrop-filter: blur(15px) !important;
+}
+
+.MuiTableHead-root {
+  background-color: rgba(255, 255, 255, 0.05) !important;
+}
+
+.MuiTableRow-root:hover {
+  background-color: rgba(255, 255, 255, 0.05) !important;
+}
+
+/* Mobile responsive adjustments */
+@media (max-width: 768px) {
+  .react-grid-layout {
+    margin: 0 !important;
+  }
+  
+  .react-grid-item {
+    margin-bottom: 16px !important;
+  }
+  
+  .MuiCard-root {
+    border-radius: 8px !important;
+  }
+  
+  .MuiTypography-h6 {
+    font-size: 1.1rem !important;
+  }
+  
+  .MuiChip-root {
+    font-size: 0.7rem !important;
+  }
+}
+
+@media (max-width: 480px) {
+  body {
+    font-size: 14px;
+  }
+  
+  .MuiButton-root {
+    padding: 6px 12px !important;
+    font-size: 0.8rem !important;
+  }
+  
+  .MuiIconButton-root {
+    padding: 4px !important;
+  }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .MuiCard-root {
+    border: 2px solid #ffffff !important;
+  }
+  
+  .profit {
+    color: #00ff00 !important;
+  }
+  
+  .loss {
+    color: #ff0000 !important;
+  }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  
+  .animate-pulse,
+  .animate-slideIn,
+  .animate-fadeIn,
+  .animate-bounce {
+    animation: none !important;
+  }
+}
+
+/* Print styles */
+@media print {
+  body {
+    background: white !important;
+    color: black !important;
+  }
+  
+  .MuiCard-root {
+    border: 1px solid black !important;
+    background: white !important;
+    box-shadow: none !important;
+  }
+  
+  .MuiIconButton-root,
+  .MuiButton-root {
+    display: none !important;
+  }
+}
+
+/* Focus styles for accessibility */
+button:focus-visible,
+.MuiButton-root:focus-visible {
+  outline: 2px solid #1976d2;
+  outline-offset: 2px;
+}
+
+/* Loading states */
+.loading-shimmer {
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0.1) 0%,
+    rgba(255, 255, 255, 0.2) 50%,
+    rgba(255, 255, 255, 0.1) 100%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}

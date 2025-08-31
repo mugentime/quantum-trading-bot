@@ -109,6 +109,11 @@ class TradingBot:
         # Start data collection
         await self.data_collector.start()
         
+        # Initialize executor connection
+        if not await self.executor.initialize_exchange():
+            raise Exception("Failed to initialize exchange connection")
+        logger.info("Exchange connection initialized successfully")
+        
         # Main trading loop
         while self.running:
             try:
@@ -126,10 +131,12 @@ class TradingBot:
                     market_data, account_balance=15000  # Default balance
                 )
                 
-                # Combine all signals
+                # Combine all signals with required fields
                 signals = traditional_signals + [
                     {
+                        'id': f"{vs.symbol}_{int(datetime.now().timestamp())}_{i}",
                         'symbol': vs.symbol,
+                        'action': 'buy' if vs.direction.value == 'long' else 'sell',
                         'side': vs.direction.value,
                         'confidence': vs.confidence,
                         'volatility_tier': vs.volatility_tier.value,
@@ -139,7 +146,7 @@ class TradingBot:
                         'position_size_pct': vs.position_size_pct,
                         'trading_mode': 'high_volatility',
                         'correlation_basis': vs.correlation_basis
-                    } for vs in volatility_signals
+                    } for i, vs in enumerate(volatility_signals)
                 ]
                 
                 # Generate AXSUSDT ultra-high frequency signals
@@ -149,6 +156,14 @@ class TradingBot:
                     )
                     if uhf_analysis['signal']:
                         uhf_signal = uhf_analysis['signal']
+                        # Ensure required fields are present
+                        if 'id' not in uhf_signal:
+                            uhf_signal['id'] = f"AXSUSDT_UHF_{int(datetime.now().timestamp())}"
+                        if 'action' not in uhf_signal:
+                            uhf_signal['action'] = uhf_signal.get('side', 'buy').lower()
+                        if 'confidence' not in uhf_signal:
+                            uhf_signal['confidence'] = uhf_analysis['confidence']
+                        
                         uhf_signal['uhf_confidence'] = uhf_analysis['confidence']
                         uhf_signal['volatility_score'] = uhf_analysis['volatility_score']
                         signals.append(uhf_signal)
@@ -240,6 +255,8 @@ async def main():
         health_port = int(os.getenv("HEALTH_CHECK_PORT", 8080))
         logger.info(f"Starting health check server on port {health_port}")
         run_health_server_thread(health_port)
+        
+        # Dashboard integrated with health server at / and /dashboard
         
         # Create bot instance
         logger.info("Creating bot instance...")

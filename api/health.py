@@ -21,6 +21,16 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 app = Flask(__name__)
 logger = logging.getLogger(__name__)
 
+# Import dashboard routes
+try:
+    from api.dashboard import dashboard, dashboard_data
+    app.add_url_rule('/', 'dashboard', dashboard)
+    app.add_url_rule('/dashboard', 'dashboard_alt', dashboard)
+    app.add_url_rule('/api/dashboard-data', 'dashboard_data', dashboard_data)
+    logger.info("Dashboard routes integrated into health server")
+except ImportError as e:
+    logger.warning(f"Dashboard integration failed: {e}")
+
 class HealthChecker:
     def __init__(self):
         self.start_time = datetime.utcnow()
