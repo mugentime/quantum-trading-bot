@@ -1,0 +1,28 @@
+{
+  "default": [
+    {
+      "key": "deployment_status",
+      "value": "Railway-GitHub integration active - git push origin main triggers automatic deployment",
+      "namespace": "default",
+      "timestamp": 1756617636207
+    },
+    {
+      "key": "trading_status",
+      "value": "AXSUSDT operational: 5 trades, 55K exposure, 8.5x leverage",
+      "namespace": "default",
+      "timestamp": 1756617642143
+    },
+    {
+      "key": "recovery_token",
+      "value": "c45618c0-7e36-4600-b4c1-eb8918326179",
+      "namespace": "default",
+      "timestamp": 1756617647999
+    },
+    {
+      "key": "next_actions",
+      "value": "API keys setup, health monitoring at /health, verify auto-deployment",
+      "namespace": "default",
+      "timestamp": 1756617654194
+    }
+  ]
+}

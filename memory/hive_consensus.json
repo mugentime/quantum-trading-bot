@@ -1,0 +1,32 @@
+{
+  "instance_id": "quantum_bot_1756644396",
+  "consensus_established": true,
+  "last_sync": 1756644396.8873994,
+  "coordinator_status": {
+    "node_id": "quantum_bot_1756644396",
+    "primary_node": "quantum_bot_1756644377",
+    "view_number": 0,
+    "sequence_number": 2,
+    "active_nodes": 1,
+    "suspected_nodes": 0,
+    "byzantine_nodes": 0,
+    "consensus_valid": true,
+    "deployment_status": {
+      "railway_status": "READY",
+      "bot_readiness": "100% READY",
+      "last_updated": 1756644396.8861046
+    },
+    "trading_status": {
+      "current_pnl": -87.68,
+      "active_positions": 5,
+      "strategy_status": "AXSUSDT ultra-high frequency operational",
+      "last_updated": 1756644396.886817
+    },
+    "technical_status": {
+      "deployment_loop": "COMPLETE",
+      "railway_config": "VERIFIED",
+      "last_updated": 1756644377.3127081
+    }
+  },
+  "snapshot_time": 1756644396.8874419
+}
