@@ -40,6 +40,21 @@ requests==2.31.0
 # Security
 cryptography==41.0.7
 
+# High-Frequency Trading
+asyncio-throttle==1.0.2
+aiofiles==23.2.1
+websockets==12.0
+uvloop==0.19.0  # For Linux/Mac performance boost
+
+# Advanced Analytics
+ta-lib==0.4.28  # Technical analysis library
+numba==0.58.1  # JIT compilation for performance
+cython==3.0.5   # Performance optimization
+
 # Testing
 pytest==7.4.3
 pytest-asyncio==0.21.1
+
+# Performance Monitoring
+memory-profiler==0.61.0
+line-profiler==4.1.1

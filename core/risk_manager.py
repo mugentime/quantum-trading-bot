@@ -47,11 +47,11 @@ class RiskManager:
                 })
                 return validation_result
             
-            # Check daily loss limits - ADJUSTED FOR 14% TARGET
+            # Check daily loss limits - SCALPING OPTIMIZED
             if leverage_manager.daily_pnl < -config.MAX_DAILY_DRAWDOWN * account_balance:
                 validation_result['warnings'].append('Daily drawdown limit approached')
-                validation_result['adjustments']['reduce_position_size'] = 0.6  # Less aggressive for 14%
-                validation_result['risk_score'] += 0.25
+                validation_result['adjustments']['reduce_position_size'] = 0.5  # More conservative for scalping
+                validation_result['risk_score'] += 0.3
             
             # Check position concentration
             symbol = signal.get('symbol', '')
@@ -87,20 +87,20 @@ class RiskManager:
             if signal_risk > 0.3:
                 validation_result['warnings'].append('Low confidence signal detected')
             
-            # Check trading frequency - REDUCED FOR SINGLE PAIR FOCUS
+            # Check trading frequency - SCALPING FREQUENCY MANAGEMENT
             if self._check_overtrading():
                 validation_result['warnings'].append('High trading frequency detected')
-                validation_result['adjustments']['delay_minutes'] = 3  # Shorter delay for single pair
-                validation_result['risk_score'] += 0.1
+                validation_result['adjustments']['delay_seconds'] = 30  # 30-second delay for scalping
+                validation_result['risk_score'] += 0.15
             
-            # Final risk assessment - ADJUSTED FOR 14% TARGET STRATEGY
-            if validation_result['risk_score'] > 0.75:  # Slightly higher threshold
+            # Final risk assessment - SCALPING RISK MANAGEMENT
+            if validation_result['risk_score'] > 0.65:  # Lower threshold for scalping safety
                 validation_result.update({
                     'approved': False,
-                    'reason': f'Risk score too high: {validation_result["risk_score"]:.2f}'
+                    'reason': f'Risk score too high for scalping: {validation_result["risk_score"]:.2f}'
                 })
-            elif validation_result['risk_score'] > 0.55:  # Adjusted warning threshold
-                validation_result['warnings'].append('Moderate risk trade - proceed with enhanced monitoring')
+            elif validation_result['risk_score'] > 0.45:  # Lower warning threshold for scalping
+                validation_result['warnings'].append('Moderate risk scalping trade - enhanced monitoring active')
             
             return validation_result
             
@@ -211,8 +211,8 @@ class RiskManager:
                 self.daily_trades_count = 0
                 self.daily_start = current_date
             
-            # Check if approaching daily trade limit
-            max_daily_trades = 20  # Conservative limit
+            # Check if approaching daily trade limit for scalping
+            max_daily_trades = 35  # Higher limit for scalping strategy
             return self.daily_trades_count >= max_daily_trades
             
         except Exception as e:
@@ -285,20 +285,20 @@ class RiskManager:
             else:
                 pnl_pct = (entry_price - current_price) / entry_price
             
-            # Check for emergency conditions
-            if pnl_pct < -0.15:  # 15% loss
+            # Check for emergency conditions - SCALPING THRESHOLDS
+            if pnl_pct < -0.08:  # 8% loss triggers emergency for scalping
                 return {
                     'emergency': True,
                     'warning': False,
-                    'reason': f'Excessive loss: {pnl_pct:.1%}'
+                    'reason': f'Excessive loss for scalping: {pnl_pct:.1%}'
                 }
             
-            # Check for warning conditions
-            if pnl_pct < -0.08:  # 8% loss
+            # Check for warning conditions - SCALPING THRESHOLDS
+            if pnl_pct < -0.04:  # 4% loss triggers warning for scalping
                 return {
                     'emergency': False,
                     'warning': True,
-                    'reason': f'Significant loss: {pnl_pct:.1%}'
+                    'reason': f'Significant loss for scalping: {pnl_pct:.1%}'
                 }
             
             return {'emergency': False, 'warning': False, 'reason': 'Position normal'}
@@ -421,6 +421,199 @@ class RiskManager:
         except Exception as e:
             logger.error(f"Error assessing overall risk status: {e}")
             return 'UNKNOWN'
+    
+    def validate_scalping_trade(self, signal: Dict, account_balance: float) -> Dict:
+        """Validate scalping trade with specific scalping risk parameters"""
+        validation_result = {
+            'approved': True,
+            'warnings': [],
+            'adjustments': {},
+            'reason': 'Scalping trade approved',
+            'risk_score': 0.0
+        }
+        
+        try:
+            # Scalping-specific checks
+            symbol = signal.get('symbol', '')
+            confidence = signal.get('confidence', 0)
+            
+            # Check signal freshness (scalping requires fresh signals)
+            signal_time = datetime.fromisoformat(signal.get('timestamp', datetime.now().isoformat()))
+            signal_age = (datetime.now() - signal_time).total_seconds()
+            
+            if signal_age > 60:  # Signal older than 1 minute
+                validation_result['warnings'].append('Signal age exceeds scalping threshold')
+                validation_result['risk_score'] += 0.2
+            
+            # Check market volatility for scalping
+            volatility = signal.get('correlation_data', {}).get('volatility', 0)
+            if volatility < 0.01:  # Too low volatility for scalping
+                validation_result.update({
+                    'approved': False,
+                    'reason': 'Insufficient market volatility for scalping'
+                })
+                return validation_result
+            
+            # Check trading session activity
+            current_hour = datetime.now().hour
+            if current_hour in [0, 1, 2, 3, 4, 5]:  # Low activity hours
+                validation_result['warnings'].append('Trading during low activity hours')
+                validation_result['adjustments']['reduce_position_size'] = 0.7
+                validation_result['risk_score'] += 0.25
+            
+            # Check for rapid consecutive trades (scalping frequency control)
+            if hasattr(self, 'last_trade_time') and self.last_trade_time:
+                time_since_last_trade = (datetime.now() - self.last_trade_time).total_seconds()
+                if time_since_last_trade < 30:  # Less than 30 seconds
+                    validation_result['warnings'].append('Rapid consecutive trading detected')
+                    validation_result['adjustments']['delay_seconds'] = 30 - time_since_last_trade
+                    validation_result['risk_score'] += 0.15
+            
+            # Scalping position size limits
+            max_scalping_position = account_balance * 0.15  # 15% max for scalping
+            if signal.get('position_size', 0) > max_scalping_position:
+                validation_result['adjustments']['max_position_size'] = max_scalping_position
+                validation_result['warnings'].append('Position size reduced for scalping safety')
+            
+            # Final scalping risk assessment
+            if validation_result['risk_score'] > 0.5:
+                validation_result.update({
+                    'approved': False,
+                    'reason': f'Scalping risk score too high: {validation_result["risk_score"]:.2f}'
+                })
+            
+            return validation_result
+            
+        except Exception as e:
+            logger.error(f"Error in scalping trade validation: {e}")
+            return {
+                'approved': False,
+                'warnings': ['Scalping validation failed'],
+                'adjustments': {},
+                'reason': f'Scalping validation error: {str(e)}',
+                'risk_score': 1.0
+            }
+    
+    def update_scalping_metrics(self, trade_result: Dict):
+        """Update scalping-specific performance metrics"""
+        try:
+            if not hasattr(self, 'scalping_metrics'):
+                self.scalping_metrics = {
+                    'total_scalping_trades': 0,
+                    'successful_scalps': 0,
+                    'failed_scalps': 0,
+                    'average_hold_time': 0,
+                    'best_scalp_pnl': 0,
+                    'worst_scalp_pnl': 0,
+                    'scalping_win_rate': 0
+                }
+            
+            # Update metrics
+            self.scalping_metrics['total_scalping_trades'] += 1
+            pnl = trade_result.get('pnl_pct', 0)
+            
+            if pnl > 0:
+                self.scalping_metrics['successful_scalps'] += 1
+            else:
+                self.scalping_metrics['failed_scalps'] += 1
+            
+            # Update best/worst
+            if pnl > self.scalping_metrics['best_scalp_pnl']:
+                self.scalping_metrics['best_scalp_pnl'] = pnl
+            if pnl < self.scalping_metrics['worst_scalp_pnl']:
+                self.scalping_metrics['worst_scalp_pnl'] = pnl
+            
+            # Update win rate
+            total = self.scalping_metrics['total_scalping_trades']
+            successful = self.scalping_metrics['successful_scalps']
+            self.scalping_metrics['scalping_win_rate'] = successful / total if total > 0 else 0
+            
+            # Update hold time
+            hold_time = trade_result.get('hold_time_seconds', 0)
+            current_avg = self.scalping_metrics['average_hold_time']
+            self.scalping_metrics['average_hold_time'] = (current_avg * (total - 1) + hold_time) / total
+            
+            # Update last trade time for frequency control
+            self.last_trade_time = datetime.now()
+            
+        except Exception as e:
+            logger.error(f"Error updating scalping metrics: {e}")
+    
+    def get_scalping_performance(self) -> Dict:
+        """Get scalping performance statistics"""
+        try:
+            if not hasattr(self, 'scalping_metrics'):
+                return {}
+            
+            metrics = self.scalping_metrics.copy()
+            
+            # Add derived metrics
+            metrics['trades_per_hour'] = self._calculate_trades_per_hour()
+            metrics['risk_adjusted_return'] = self._calculate_risk_adjusted_scalping_return()
+            metrics['frequency_score'] = self._calculate_frequency_score()
+            
+            return metrics
+            
+        except Exception as e:
+            logger.error(f"Error getting scalping performance: {e}")
+            return {}
+    
+    def _calculate_trades_per_hour(self) -> float:
+        """Calculate average trades per hour for scalping"""
+        try:
+            if not hasattr(self, 'scalping_metrics'):
+                return 0.0
+            
+            total_trades = self.scalping_metrics.get('total_scalping_trades', 0)
+            if total_trades == 0:
+                return 0.0
+            
+            # Estimate based on average hold time and trading hours
+            avg_hold_time = self.scalping_metrics.get('average_hold_time', 300)  # 5 minutes default
+            trades_per_hour = 3600 / max(avg_hold_time, 60)  # At least 1 minute per trade
+            
+            return min(trades_per_hour, 20)  # Cap at 20 trades per hour
+            
+        except Exception as e:
+            logger.error(f"Error calculating trades per hour: {e}")
+            return 0.0
+    
+    def _calculate_risk_adjusted_scalping_return(self) -> float:
+        """Calculate risk-adjusted return for scalping"""
+        try:
+            if not hasattr(self, 'scalping_metrics'):
+                return 0.0
+            
+            win_rate = self.scalping_metrics.get('scalping_win_rate', 0)
+            best_pnl = self.scalping_metrics.get('best_scalp_pnl', 0)
+            worst_pnl = abs(self.scalping_metrics.get('worst_scalp_pnl', 0))
+            
+            # Simple risk-adjusted calculation
+            if worst_pnl == 0:
+                return win_rate * best_pnl
+            
+            return (win_rate * best_pnl) / worst_pnl
+            
+        except Exception as e:
+            logger.error(f"Error calculating risk-adjusted return: {e}")
+            return 0.0
+    
+    def _calculate_frequency_score(self) -> float:
+        """Calculate trading frequency score for scalping efficiency"""
+        try:
+            total_trades = self.scalping_metrics.get('total_scalping_trades', 0)
+            win_rate = self.scalping_metrics.get('scalping_win_rate', 0)
+            
+            # Target: 20-35 trades per day with >65% win rate
+            target_trades = 25
+            target_win_rate = 0.65
+            
+            frequency_score = (total_trades / target_trades) * (win_rate / target_win_rate)
+            return min(frequency_score, 2.0)  # Cap at 2.0
+            
+        except Exception as e:
+            logger.error(f"Error calculating frequency score: {e}")
+            return 0.0
     
     def reset_emergency_mode(self):
         """Reset emergency mode (manual intervention required)"""

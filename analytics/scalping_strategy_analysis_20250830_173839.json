@@ -1,0 +1,276 @@
+{
+  "analysis_timestamp": "2025-08-30T17:38:39.573400",
+  "current_performance": {
+    "timeframe_analysis": {},
+    "performance_summary": {
+      "avg_return_pct": 0.1363,
+      "avg_win_rate": 47.02,
+      "total_trades": 108,
+      "system_trades_per_day": 3.6,
+      "avg_drawdown": 0.1794
+    },
+    "scalping_potential": {},
+    "top_performers": [
+      {
+        "symbol": "LINKUSDT",
+        "current_return": 0.4916,
+        "win_rate": 57.14,
+        "total_trades": 14,
+        "avg_hold_time": 17.71,
+        "trades_per_day": 0.4666666666666667,
+        "avg_profit_per_trade": 1.7542,
+        "sharpe_ratio": 0.3585,
+        "max_drawdown": 0.2527
+      },
+      {
+        "symbol": "ETHUSDT",
+        "current_return": 0.4798,
+        "win_rate": 70.0,
+        "total_trades": 10,
+        "avg_hold_time": 29.7,
+        "trades_per_day": 0.3333333333333333,
+        "avg_profit_per_trade": 2.3951,
+        "sharpe_ratio": 0.6195,
+        "max_drawdown": 0.0679
+      },
+      {
+        "symbol": "ADAUSDT",
+        "current_return": 0.1881,
+        "win_rate": 41.67,
+        "total_trades": 12,
+        "avg_hold_time": 22.92,
+        "trades_per_day": 0.4,
+        "avg_profit_per_trade": 0.7857,
+        "sharpe_ratio": 0.1563,
+        "max_drawdown": 0.192
+      }
+    ]
+  },
+  "timeframe_analysis": {
+    "1m": {
+      "timeframe": "1m",
+      "avg_trade_duration_hours": 1.98,
+      "win_rate_pct": 35.0,
+      "avg_profit_per_trade_pct": 0.95804,
+      "signal_frequency_per_day": 5,
+      "volatility": 9.665000000000001,
+      "liquidity_score": 0.95,
+      "recommended_position_size_pct": 0.6666666666666666
+    },
+    "3m": {
+      "timeframe": "3m",
+      "avg_trade_duration_hours": 5.9399999999999995,
+      "win_rate_pct": 56.0,
+      "avg_profit_per_trade_pct": 1.330611111111111,
+      "signal_frequency_per_day": 1,
+      "volatility": 6.9588,
+      "liquidity_score": 0.95,
+      "recommended_position_size_pct": 2.0
+    },
+    "5m": {
+      "timeframe": "5m",
+      "avg_trade_duration_hours": 9.9,
+      "win_rate_pct": 63.0,
+      "avg_profit_per_trade_pct": 1.5967333333333331,
+      "signal_frequency_per_day": 1,
+      "volatility": 5.799,
+      "liquidity_score": 0.9,
+      "recommended_position_size_pct": 3.3333333333333335
+    },
+    "15m": {
+      "timeframe": "15m",
+      "avg_trade_duration_hours": 29.7,
+      "win_rate_pct": 70.0,
+      "avg_profit_per_trade_pct": 2.3951,
+      "signal_frequency_per_day": 0,
+      "volatility": 3.866,
+      "liquidity_score": 0.9,
+      "recommended_position_size_pct": 5.0
+    }
+  },
+  "scalping_parameters": {
+    "1m": {
+      "timeframe": "1m",
+      "stop_loss_pct": 0.8,
+      "take_profit_pct": 1.2,
+      "max_hold_time_minutes": 15,
+      "position_size_pct": 0.6666666666666666,
+      "daily_trade_target": 5,
+      "max_concurrent_trades": 3
+    },
+    "3m": {
+      "timeframe": "3m",
+      "stop_loss_pct": 1.2,
+      "take_profit_pct": 1.8,
+      "max_hold_time_minutes": 30,
+      "position_size_pct": 2.0,
+      "daily_trade_target": 1,
+      "max_concurrent_trades": 2
+    },
+    "5m": {
+      "timeframe": "5m",
+      "stop_loss_pct": 1.5,
+      "take_profit_pct": 2.2,
+      "max_hold_time_minutes": 60,
+      "position_size_pct": 3.3333333333333335,
+      "daily_trade_target": 1,
+      "max_concurrent_trades": 2
+    },
+    "15m": {
+      "timeframe": "15m",
+      "stop_loss_pct": 2.0,
+      "take_profit_pct": 3.0,
+      "max_hold_time_minutes": 240,
+      "position_size_pct": 5.0,
+      "daily_trade_target": 0,
+      "max_concurrent_trades": 1
+    }
+  },
+  "trade_frequency_requirements": {
+    "1m_aggressive": {
+      "daily_target_pct": 0.14,
+      "required_trades_per_day": 51,
+      "required_win_rate": 0.6,
+      "required_profit_per_trade": 0.27999999999999997,
+      "timeframe_recommendation": "1m",
+      "feasibility_score": 0.2
+    },
+    "3m_moderate": {
+      "daily_target_pct": 0.14,
+      "required_trades_per_day": 29,
+      "required_win_rate": 0.65,
+      "required_profit_per_trade": 0.5,
+      "timeframe_recommendation": "3m",
+      "feasibility_score": 0.5
+    },
+    "5m_conservative": {
+      "daily_target_pct": 0.14,
+      "required_trades_per_day": 16,
+      "required_win_rate": 0.7,
+      "required_profit_per_trade": 0.8999999999999999,
+      "timeframe_recommendation": "5m",
+      "feasibility_score": 0.7
+    },
+    "15m_swing": {
+      "daily_target_pct": 0.14,
+      "required_trades_per_day": 12,
+      "required_win_rate": 0.7,
+      "required_profit_per_trade": 1.17,
+      "timeframe_recommendation": "15m",
+      "feasibility_score": 0.7
+    }
+  },
+  "liquidity_analysis": {
+    "primary_pair": "ETHUSDT",
+    "volume_requirements": {
+      "1m": {
+        "min_volume_24h": 1000000000,
+        "min_depth_levels": 50
+      },
+      "3m": {
+        "min_volume_24h": 500000000,
+        "min_depth_levels": 30
+      },
+      "5m": {
+        "min_volume_24h": 200000000,
+        "min_depth_levels": 20
+      }
+    },
+    "slippage_estimates": {
+      "1m": {
+        "small_order": 0.02,
+        "medium_order": 0.05,
+        "large_order": 0.1
+      },
+      "3m": {
+        "small_order": 0.015,
+        "medium_order": 0.03,
+        "large_order": 0.07
+      },
+      "5m": {
+        "small_order": 0.01,
+        "medium_order": 0.02,
+        "large_order": 0.05
+      }
+    },
+    "recommended_position_limits": {
+      "1m": {
+        "max_position_usd": 5000,
+        "max_positions_concurrent": 3
+      },
+      "3m": {
+        "max_position_usd": 10000,
+        "max_positions_concurrent": 2
+      },
+      "5m": {
+        "max_position_usd": 15000,
+        "max_positions_concurrent": 2
+      }
+    }
+  },
+  "risk_management_framework": {
+    "scalping_risk_controls": {
+      "max_daily_drawdown": 0.05,
+      "max_losing_streak": 5,
+      "position_size_scaling": {
+        "base_size": 0.02,
+        "after_loss": 0.015,
+        "after_win": 0.025,
+        "max_size": 0.03
+      },
+      "time_based_limits": {
+        "max_trades_per_hour": 12,
+        "cooling_period_after_loss": 300,
+        "daily_trade_limit": 80
+      }
+    },
+    "emergency_controls": {
+      "circuit_breaker_loss": 0.08,
+      "volatility_filter": 2.0,
+      "correlation_breakdown_threshold": 0.3
+    }
+  },
+  "optimization_matrix": {
+    "strategy_transformation": {
+      "from_swing_to_scalping": {
+        "current_avg_hold_time": "29.7 hours (ETHUSDT)",
+        "current_trades_per_day": 0.33,
+        "target_avg_hold_time": "15-30 minutes",
+        "target_trades_per_day": "15-25",
+        "transformation_factor": "45x increase in frequency"
+      }
+    },
+    "recommended_approach": {
+      "primary_timeframe": "3m",
+      "reasoning": "Optimal balance of signal frequency and reliability",
+      "expected_daily_trades": 15,
+      "expected_win_rate": "65%",
+      "expected_daily_return": "14%",
+      "risk_adjusted_return": "11-16%"
+    },
+    "parameter_optimization": {
+      "1m": "ScalpingParameters(timeframe='1m', stop_loss_pct=0.8, take_profit_pct=1.2, max_hold_time_minutes=15, min_correlation_change=0.1, position_size_pct=0.6666666666666666, max_concurrent_trades=3, daily_trade_target=5)",
+      "3m": "ScalpingParameters(timeframe='3m', stop_loss_pct=1.2, take_profit_pct=1.8, max_hold_time_minutes=30, min_correlation_change=0.1, position_size_pct=2.0, max_concurrent_trades=2, daily_trade_target=1)",
+      "5m": "ScalpingParameters(timeframe='5m', stop_loss_pct=1.5, take_profit_pct=2.2, max_hold_time_minutes=60, min_correlation_change=0.15, position_size_pct=3.3333333333333335, max_concurrent_trades=2, daily_trade_target=1)",
+      "15m": "ScalpingParameters(timeframe='15m', stop_loss_pct=2.0, take_profit_pct=3.0, max_hold_time_minutes=240, min_correlation_change=0.15, position_size_pct=5.0, max_concurrent_trades=1, daily_trade_target=0)"
+    },
+    "frequency_analysis": {
+      "1m_aggressive": "TradeFrequencyRequirement(daily_target_pct=0.14, required_trades_per_day=51, required_win_rate=0.6, required_profit_per_trade=0.27999999999999997, timeframe_recommendation='1m', feasibility_score=0.2)",
+      "3m_moderate": "TradeFrequencyRequirement(daily_target_pct=0.14, required_trades_per_day=29, required_win_rate=0.65, required_profit_per_trade=0.5, timeframe_recommendation='3m', feasibility_score=0.5)",
+      "5m_conservative": "TradeFrequencyRequirement(daily_target_pct=0.14, required_trades_per_day=16, required_win_rate=0.7, required_profit_per_trade=0.8999999999999999, timeframe_recommendation='5m', feasibility_score=0.7)",
+      "15m_swing": "TradeFrequencyRequirement(daily_target_pct=0.14, required_trades_per_day=12, required_win_rate=0.7, required_profit_per_trade=1.17, timeframe_recommendation='15m', feasibility_score=0.7)"
+    },
+    "feasibility_assessment": {
+      "1m_scalping": "High risk, requires perfect execution",
+      "3m_scalping": "Recommended - balanced approach",
+      "5m_scalping": "Conservative backup option",
+      "hybrid_approach": "Mix 3m (70%) + 5m (30%) signals"
+    }
+  },
+  "implementation_roadmap": {
+    "phase_1_testing": "Implement 3m scalping with paper trading",
+    "phase_2_validation": "Live test with 1% of capital for 7 days",
+    "phase_3_scaling": "Gradually increase position sizes",
+    "phase_4_optimization": "Fine-tune parameters based on live results"
+  }
+}

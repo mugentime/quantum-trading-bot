@@ -46,23 +46,26 @@ class TradingSignal:
 
 class SignalGenerator:
     def __init__(self, 
-                 confidence_threshold: float = 0.70,  # LOWERED FOR 14% TARGET
-                 min_statistical_significance: float = 0.90):  # ADJUSTED
-        """Initialize advanced SignalGenerator with optimized thresholds for 14% daily target"""
+                 confidence_threshold: float = 0.60,  # OPTIMIZED FOR HIGH-FREQUENCY SCALPING
+                 min_statistical_significance: float = 0.85):  # ADJUSTED FOR MORE SIGNALS
+        """Initialize advanced SignalGenerator optimized for high-frequency scalping"""
         self.confidence_threshold = confidence_threshold
         self.min_statistical_significance = min_statistical_significance
         self.active_signals = {}
         self.signal_history = []
         self.signal_count = 0
         
-        # Signal filtering parameters - OPTIMIZED FOR ETHUSDT FOCUS
-        self.min_correlation_change = 0.15  # Lower threshold for more signals
-        self.regime_change_threshold = 0.25  # More sensitive to changes
+        # Signal filtering parameters - HIGH-FREQUENCY SCALPING OPTIMIZED
+        self.min_correlation_change = 0.08  # Much lower threshold for frequent signals
+        self.regime_change_threshold = 0.15  # More sensitive for scalping
         self.false_positive_filters = True
-        # Focus pairs for 14% daily strategy
-        self.primary_symbols = ['ETHUSDT']  # Primary focus symbol
+        # High-frequency scalping focus
+        self.primary_symbols = ['ETHUSDT']  # Primary scalping symbol
+        self.signal_generation_frequency = 30  # Generate signals every 30 seconds
+        self.last_signal_time = None
+        self.min_signal_interval = 15  # Minimum 15 seconds between signals
         
-        logger.info("SignalGenerator initialized with advanced correlation analysis")
+        logger.info("SignalGenerator initialized for high-frequency scalping with enhanced signal detection")
         
     def generate(self, correlation_results: Dict, market_data: Dict) -> List[Dict]:
         """Generate advanced trading signals from correlation analysis"""
@@ -126,9 +129,9 @@ class SignalGenerator:
             if len(symbols) < 2 or confidence < self.confidence_threshold:
                 return None
             
-            # PRIORITIZE ETHUSDT FOR 14% TARGET STRATEGY
+            # PRIORITIZE ETHUSDT FOR HIGH-FREQUENCY SCALPING
             if 'ETHUSDT' in symbols:
-                symbol = 'ETHUSDT'  # Always prefer ETHUSDT
+                symbol = 'ETHUSDT'  # Always prefer ETHUSDT for scalping
             else:
                 symbol = symbols[0]
             
@@ -153,11 +156,11 @@ class SignalGenerator:
             if statistical_significance < (self.min_statistical_significance / 100):
                 return None
             
-            # Calculate position sizing - FOCUSED ON 80% FOR 14% TARGET
+            # Calculate position sizing - SCALPING OPTIMIZED
             position_size = self._calculate_position_size(confidence, symbol, market_data)
-            # Boost position size for ETHUSDT given its proven performance
+            # Scalping-specific position sizing for ETHUSDT
             if symbol == 'ETHUSDT':
-                position_size = min(position_size * 1.2, config.RISK_PER_TRADE)
+                position_size = min(position_size * 1.1, 0.20)  # Cap at 20% for scalping
             
             # Set stop loss and take profit based on statistical analysis
             stop_loss, take_profit = self._calculate_risk_levels(
@@ -304,38 +307,38 @@ class SignalGenerator:
         return SignalAction.LONG if correlation > 0 else SignalAction.SHORT
     
     def _calculate_position_size(self, confidence: float, symbol: str, market_data: Dict) -> float:
-        """Calculate position size optimized for 14% daily target strategy"""
-        base_position_size = config.RISK_PER_TRADE  # 0.80 for aggressive strategy
+        """Calculate position size optimized for high-frequency scalping"""
+        base_position_size = config.RISK_PER_TRADE  # 0.15 for scalping strategy
         
-        # ETHUSDT gets preferential sizing due to proven performance
+        # ETHUSDT gets optimized sizing for scalping
         if symbol == 'ETHUSDT':
-            confidence_multiplier = min(confidence * 1.3, 1.5)  # Higher multiplier for ETHUSDT
+            confidence_multiplier = min(confidence * 1.2, 1.4)  # Moderate multiplier for scalping
         else:
-            confidence_multiplier = min(confidence * 1.2, 1.4)
+            confidence_multiplier = min(confidence * 1.0, 1.2)
         
-        # Get volume data if available for liquidity adjustment
+        # Get volume data for liquidity adjustment (more conservative for scalping)
         volume_data = market_data.get(symbol, {}).get('volume', 1000000)
-        liquidity_factor = min(volume_data / 1000000, 2.0)  # Cap at 2x
+        liquidity_factor = min(volume_data / 1000000, 1.5)  # More conservative cap
         
         position_size = base_position_size * confidence_multiplier * liquidity_factor
-        # Increased max position size for aggressive 14% target
-        max_position = config.RISK_PER_TRADE if symbol == 'ETHUSDT' else 0.05
+        # Scalping position limits
+        max_position = 0.20 if symbol == 'ETHUSDT' else 0.10
         return min(position_size, max_position)
     
     def _calculate_risk_levels(self, entry_price: float, action: SignalAction, 
                               confidence: float, symbol: str, market_data: Dict) -> Tuple[float, float]:
-        """Calculate stop loss and take profit levels optimized for 14% daily target"""
-        # OPTIMIZED RISK LEVELS FOR 14% STRATEGY
+        """Calculate stop loss and take profit levels optimized for high-frequency scalping"""
+        # SCALPING-OPTIMIZED RISK LEVELS
         if symbol == 'ETHUSDT':
-            base_stop_loss_pct = 0.05  # 5% stop loss for ETHUSDT (tight control)
-            base_take_profit_ratio = 1.6   # 1.6:1 ratio for ETHUSDT
+            base_stop_loss_pct = 0.012  # 1.2% stop loss for scalping
+            base_take_profit_ratio = 1.5   # 1.5:1 ratio (1.8% take profit)
         else:
-            base_stop_loss_pct = config.STOP_LOSS_PERCENT  # Default for others
+            base_stop_loss_pct = config.STOP_LOSS_PERCENT
             base_take_profit_ratio = config.TAKE_PROFIT_RATIO
         
-        # Adjust based on confidence (higher confidence = optimized stops)
-        stop_loss_pct = base_stop_loss_pct * (1.3 - confidence * 0.3)  # Tighter for high confidence
-        take_profit_ratio = base_take_profit_ratio * (1 + confidence * 0.4)   # Better ratios for high confidence
+        # Scalping-specific adjustments based on confidence
+        stop_loss_pct = base_stop_loss_pct * (1.1 - confidence * 0.15)  # Slight tightening
+        take_profit_ratio = base_take_profit_ratio * (1 + confidence * 0.2)   # Moderate improvement
         
         if action == SignalAction.LONG:
             stop_loss = entry_price * (1 - stop_loss_pct)
@@ -456,8 +459,8 @@ class SignalGenerator:
             if signal['statistical_significance'] < (self.min_statistical_significance / 100):
                 continue
             
-            # Filter by minimum risk/reward ratio - LOWERED FOR MORE SIGNALS
-            if signal['risk_reward_ratio'] < 1.3:  # Slightly lower threshold for 14% target
+            # Filter by minimum risk/reward ratio - SCALPING OPTIMIZED
+            if signal['risk_reward_ratio'] < 1.2:  # Lower threshold for scalping frequency
                 continue
             
             # Check for signal conflicts (opposite signals on same symbol)
@@ -476,6 +479,103 @@ class SignalGenerator:
                 filtered_signals.append(signal)
         
         return filtered_signals
+    
+    def can_generate_signal(self) -> bool:
+        """Check if enough time has passed since last signal generation"""
+        if self.last_signal_time is None:
+            return True
+        
+        time_since_last = (datetime.now() - self.last_signal_time).total_seconds()
+        return time_since_last >= self.min_signal_interval
+    
+    def generate_scalping_signals(self, market_data: Dict, correlation_results: Dict) -> List[Dict]:
+        """Generate high-frequency scalping signals optimized for 3-minute timeframe"""
+        signals = []
+        
+        try:
+            # Check if we can generate signals
+            if not self.can_generate_signal():
+                return signals
+            
+            # Focus on ETHUSDT for scalping
+            symbol = 'ETHUSDT'
+            if symbol not in market_data:
+                return signals
+            
+            # Get current price and volume data
+            price_data = market_data[symbol]
+            current_price = price_data.get('last')
+            volume = price_data.get('volume', 0)
+            
+            if not current_price or volume < 1000000:  # Minimum volume requirement
+                return signals
+            
+            # Check for micro-movements and correlation deviations
+            correlation_data = correlation_results.get('statistics', {})
+            current_correlation = correlation_data.get('mean_correlation', 0)
+            correlation_std = correlation_data.get('correlation_std', 0)
+            
+            # Generate scalping signal based on tight thresholds
+            if correlation_std > 0.05:  # Volatility threshold for scalping
+                confidence = min(correlation_std * 10, 0.95)  # Scale volatility to confidence
+                
+                if confidence > self.confidence_threshold:
+                    # Determine signal direction based on price momentum
+                    price_change = price_data.get('change_percent', 0)
+                    action = SignalAction.LONG if price_change > 0 else SignalAction.SHORT
+                    
+                    # Calculate scalping-specific risk levels
+                    stop_loss_pct = 0.012  # 1.2%
+                    take_profit_pct = 0.018  # 1.8%
+                    
+                    if action == SignalAction.LONG:
+                        stop_loss = current_price * (1 - stop_loss_pct)
+                        take_profit = current_price * (1 + take_profit_pct)
+                    else:
+                        stop_loss = current_price * (1 + stop_loss_pct)
+                        take_profit = current_price * (1 - take_profit_pct)
+                    
+                    # Calculate position size for scalping (smaller positions)
+                    position_size = config.RISK_PER_TRADE * 0.8  # Reduced size for scalping
+                    
+                    signal_id = f"SCALP_{datetime.now().strftime('%Y%m%d_%H%M%S')}"
+                    
+                    signal = {
+                        'id': signal_id,
+                        'timestamp': datetime.now().isoformat(),
+                        'symbol': symbol,
+                        'action': action.value,
+                        'signal_type': 'scalping_opportunity',
+                        'entry_price': float(current_price),
+                        'confidence': float(confidence),
+                        'correlation_data': {
+                            'current_correlation': float(current_correlation),
+                            'volatility': float(correlation_std),
+                            'volume': float(volume)
+                        },
+                        'stop_loss': float(stop_loss),
+                        'take_profit': float(take_profit),
+                        'position_size': float(position_size),
+                        'reasoning': f"Scalping opportunity detected: {correlation_std:.3f} volatility, "
+                                   f"{confidence:.1%} confidence, volume: {volume:,.0f}",
+                        'statistical_significance': 0.90,
+                        'market_regime': 'scalping',
+                        'risk_reward_ratio': 1.5,
+                        'expected_duration': 'ultra-short-term',
+                        'supporting_signals': ['high_volume', 'volatility_spike']
+                    }
+                    
+                    signals.append(signal)
+                    self.last_signal_time = datetime.now()
+                    
+                    logger.info(f"SCALPING SIGNAL: {action.value} {symbol} @ {current_price} "
+                              f"(confidence={confidence:.3f}, vol={correlation_std:.3f})")
+            
+            return signals
+            
+        except Exception as e:
+            logger.error(f"Error generating scalping signals: {e}", exc_info=True)
+            return signals
     
     def get_signal_performance_stats(self) -> Dict:
         """Get performance statistics of generated signals"""
@@ -496,5 +596,7 @@ class SignalGenerator:
             'signal_types': signal_types,
             'average_confidence': avg_confidence / total_signals,
             'confidence_threshold': self.confidence_threshold,
-            'min_statistical_significance': self.min_statistical_significance
+            'min_statistical_significance': self.min_statistical_significance,
+            'scalping_mode': True,
+            'min_signal_interval': self.min_signal_interval
         }

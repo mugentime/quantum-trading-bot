@@ -13,40 +13,42 @@ class Config:
     BINANCE_SECRET_KEY = os.getenv('BINANCE_SECRET_KEY')
     BINANCE_TESTNET = os.getenv('BINANCE_TESTNET', 'false').lower() == 'true'
     
-    # Trading Parameters - OPTIMIZED FOR 14% DAILY TARGET
-    SYMBOLS = ['ETHUSDT']  # Focus on ETHUSDT for 14% daily (13.6% achievable)
-    TIMEFRAMES = ['1m', '5m', '15m', '1h']
-    CORRELATION_PERIOD = 50
-    DEVIATION_THRESHOLD = 0.10  # Lower threshold for more signals
+    # Trading Parameters - HIGH-FREQUENCY SCALPING OPTIMIZED
+    SYMBOLS = ['ETHUSDT']  # Primary focus for high-frequency scalping
+    TIMEFRAMES = ['1m', '3m', '5m']  # Optimized for 3-minute scalping
+    CORRELATION_PERIOD = 30  # Shorter period for faster signal detection
+    DEVIATION_THRESHOLD = 0.08  # Lower threshold for more frequent signals
     
-    # Risk Management - OPTIMIZED FOR 14% DAILY TARGET
-    RISK_PER_TRADE = float(os.getenv('RISK_PER_TRADE', 0.80))  # 80% per trade as configured
+    # Risk Management - HIGH-FREQUENCY SCALPING OPTIMIZED
+    RISK_PER_TRADE = float(os.getenv('RISK_PER_TRADE', 0.15))  # Lower risk per trade for high frequency
     MAX_CONCURRENT_POSITIONS = int(os.getenv('MAX_CONCURRENT_POSITIONS', 1))  # Single position focus
-    DEFAULT_LEVERAGE = int(os.getenv('DEFAULT_LEVERAGE', 8.5))  # Optimal leverage for 14% daily
+    DEFAULT_LEVERAGE = int(os.getenv('DEFAULT_LEVERAGE', 8.5))  # Optimal leverage
     MAX_LEVERAGE = int(os.getenv('MAX_LEVERAGE', 10))  # Safety limit
     MIN_LEVERAGE = int(os.getenv('MIN_LEVERAGE', 8))  # Minimum for target achievement
-    STOP_LOSS_PERCENT = 0.02
-    TAKE_PROFIT_RATIO = 2.0
+    STOP_LOSS_PERCENT = 0.012  # 1.2% stop loss for tight control
+    TAKE_PROFIT_RATIO = 1.5  # 1.8% take profit (1.2% * 1.5)
     
-    # Advanced Leverage Parameters - AGGRESSIVE MODE
-    MAX_DAILY_DRAWDOWN = 0.25  # 25% daily loss limit - AGGRESSIVE
-    MAX_POSITION_RISK = 0.15   # 15% per position with leverage - AGGRESSIVE  
-    MAX_CORRELATION_EXPOSURE = 0.50  # Max 50% in correlated trades - AGGRESSIVE
-    LEVERAGE_REDUCTION_TRIGGER = 0.15  # Reduce leverage after 15% drawdown
-    MAX_MARGIN_USAGE = 0.90    # Use 90% margin utilization - AGGRESSIVE
+    # Advanced Leverage Parameters - SCALPING OPTIMIZED
+    MAX_DAILY_DRAWDOWN = 0.15  # 15% daily loss limit for scalping
+    MAX_POSITION_RISK = 0.08   # 8% per position with leverage for tighter control
+    MAX_CORRELATION_EXPOSURE = 0.30  # Lower correlation exposure for scalping
+    LEVERAGE_REDUCTION_TRIGGER = 0.10  # Reduce leverage after 10% drawdown
+    MAX_MARGIN_USAGE = 0.70    # Conservative margin usage for scalping
     
-    # Leverage Tiers based on signal strength - MAXIMUM AGGRESSIVE
+    # Leverage Tiers based on signal strength - SCALPING OPTIMIZED
     LEVERAGE_TIERS = {
-        'base': 25,               # Default for all trades - INCREASED
-        'medium_confidence': 35,  # Deviation 0.15-0.30 - INCREASED
-        'high_confidence': 45,    # Deviation 0.30-0.50 - INCREASED
-        'extreme_confidence': 50  # Deviation > 0.50 - MAXIMUM
+        'base': 8,                # Conservative base for scalping
+        'medium_confidence': 8.5, # Slight increase for medium confidence
+        'high_confidence': 9,     # Moderate increase for high confidence
+        'extreme_confidence': 10  # Maximum for extreme confidence
     }
     
-    # Execution
-    SLIPPAGE_TOLERANCE = 0.001
-    MAX_ORDER_RETRIES = 3
-    ORDER_TIMEOUT = 10
+    # Execution - HIGH-FREQUENCY OPTIMIZED
+    SLIPPAGE_TOLERANCE = 0.0005  # Tighter slippage tolerance for scalping
+    MAX_ORDER_RETRIES = 5  # More retries for high-frequency trading
+    ORDER_TIMEOUT = 5  # Shorter timeout for faster execution
+    SIGNAL_GENERATION_INTERVAL = 30  # Generate signals every 30 seconds
+    MIN_SIGNAL_INTERVAL = 15  # Minimum 15 seconds between signals
     
     # Data Settings
     LOOKBACK_DAYS = 30
