@@ -14,7 +14,7 @@ class Config:
     BINANCE_TESTNET = os.getenv('BINANCE_TESTNET', 'false').lower() == 'true'
     
     # Trading Parameters - HIGH-VOLATILITY MULTI-PAIR OPTIMIZED
-    SYMBOLS = ['AXSUSDT', 'GALAUSDT', 'SUSHIUSDT', 'SANDUSDT', 'AVAXUSDT', 'ETHUSDT']  # High-volatility pairs for 300%+ monthly target
+    SYMBOLS = ['ETHUSDT', 'AVAXUSDT', 'SANDUSDT', 'SUSHIUSDT', 'GALAUSDT']  # High-volatility pairs for 300%+ monthly target - ETHUSDT prioritized for volume
     TIMEFRAMES = ['1m', '3m', '5m']  # Optimized for ultra-high frequency scalping
     CORRELATION_PERIOD = 30  # Shorter period for faster signal detection
     DEVIATION_THRESHOLD = 0.08  # Lower threshold for more frequent signals
